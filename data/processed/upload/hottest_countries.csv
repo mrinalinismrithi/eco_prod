@@ -1,0 +1,11 @@
+Region,Country,FirstYear,LatestYear,FirstTemperature,LatestTemperature,AverageTemperature,TemperatureChange,WarmingTrendPerYear,VolatilityScore,HottestYear,HottestTemperature
+Asia,Philippines,1980,1999,25.6,27.5,26.485,1.9,0.0847,0.4447,1999,27.5
+Africa,Ghana,1980,1999,25.5,27.4,26.385,1.9,0.0847,0.4447,1999,27.4
+Africa,Nigeria,1980,1999,25.3,27.2,26.185,1.9,0.0847,0.4447,1999,27.2
+Asia,Malaysia,1980,1999,25.1,27.0,25.985,1.9,0.0847,0.4447,1999,27.0
+Asia,Thailand,1980,1999,24.8,26.7,25.685,1.9,0.0847,0.4447,1999,26.7
+Asia,Indonesia,1980,1999,24.4,26.3,25.285,1.9,0.0847,0.4447,1999,26.3
+Africa,Sudan,1980,1999,24.1,26.0,24.985,1.9,0.0847,0.4447,1999,26.0
+South America,Brazil,1980,1999,23.5,25.4,24.385,1.9,0.0847,0.4447,1999,25.4
+South America,Venezuela,1980,1999,22.9,24.8,23.785,1.9,0.0847,0.4447,1999,24.8
+Asia,Vietnam,1980,1999,22.3,24.2,23.185,1.9,0.0847,0.4447,1999,24.2

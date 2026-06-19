@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="EcoLens — Climate Intelligence Platform. Explore climate trends, live weather, and AI-powered insights." />
+    <title>EcoLens — Climate Intelligence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.6.0/dist/tabler-icons.min.css" />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <!-- ═══ SIDEBAR ═══ -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-inner">
+        <div class="brand">
+          <div class="brand-icon">
+            <i class="ti ti-leaf"></i>
+          </div>
+          <div class="brand-text">
+            <span class="brand-name">EcoLens</span>
+            <span class="brand-sub">Climate Intelligence</span>
+          </div>
+        </div>
+
+        <nav class="nav" aria-label="Primary navigation">
+          <span class="nav-section-label">Explore</span>
+          <button class="nav-item active" type="button" data-page="dashboard">
+            <i class="ti ti-layout-dashboard" aria-hidden="true"></i>
+            <span>Dashboard</span>
+          </button>
+          <button class="nav-item" type="button" data-page="analytics">
+            <i class="ti ti-chart-bar" aria-hidden="true"></i>
+            <span>Analytics</span>
+          </button>
+          <button class="nav-item" type="button" data-page="assistant">
+            <i class="ti ti-message-bolt" aria-hidden="true"></i>
+            <span>AI Assistant</span>
+            <span class="nav-badge">AI</span>
+          </button>
+          <button class="nav-item" type="button" data-page="weather">
+            <i class="ti ti-cloud-rain" aria-hidden="true"></i>
+            <span>Live Weather</span>
+          </button>
+          <span class="nav-section-label">System</span>
+          <button class="nav-item" type="button" data-page="etl">
+            <i class="ti ti-database-cog" aria-hidden="true"></i>
+            <span>ETL Pipeline</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="status-pill" id="status-pill">
+            <span class="status-dot" id="status-dot"></span>
+            <span id="api-status">Connecting…</span>
+          </div>
+          <p class="status-sub" id="data-status"></p>
+
+          <div class="user-row">
+            <span class="user-name"><i class="ti ti-user-circle"></i> <span id="current-username">—</span></span>
+            <button class="btn-link" type="button" id="logout-btn"><i class="ti ti-logout"></i> Logout</button>
+          </div>
+
+          <label class="api-label" for="api-base">
+            API endpoint
+            <input id="api-base" type="url" value="" autocomplete="off" spellcheck="false" />
+          </label>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ═══ MAIN SHELL ═══ -->
+    <main class="shell" id="main">
+
+      <!-- GLOBAL NOTICE BAR -->
+      <div class="notice hidden" id="global-notice" role="status"></div>
+
+      <!-- ── DASHBOARD ── -->
+      <section class="page active" id="page-dashboard" aria-labelledby="dashboard-title">
+        <header class="page-header">
+          <div>
+            <p class="eyebrow">Overview</p>
+            <h2 id="dashboard-title">Climate Intelligence Dashboard</h2>
+            <p class="page-sub">Global surface temperature trends · historical CSV + live weather · GPT-4o-mini powered</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn-outline" type="button" id="refresh-dashboard">
+              <i class="ti ti-refresh"></i> Refresh
+            </button>
+          </div>
+        </header>
+
+        <!-- METRIC CARDS -->
+        <div class="metrics-row" aria-label="Climate summary metrics">
+          <article class="metric-card">
+            <div class="metric-icon" style="--ic:#16a34a"><i class="ti ti-database"></i></div>
+            <div>
+              <p class="metric-label">Climate records</p>
+              <strong class="metric-value" id="metric-rows">—</strong>
+            </div>
+          </article>
+          <article class="metric-card">
+            <div class="metric-icon" style="--ic:#2563eb"><i class="ti ti-world"></i></div>
+            <div>
+              <p class="metric-label">Countries tracked</p>
+              <strong class="metric-value" id="metric-countries">—</strong>
+            </div>
+          </article>
+          <article class="metric-card">
+            <div class="metric-icon" style="--ic:#7c3aed"><i class="ti ti-map-2"></i></div>
+            <div>
+              <p class="metric-label">Regions tracked</p>
+              <strong class="metric-value" id="metric-regions">—</strong>
+            </div>
+          </article>
+          <article class="metric-card">
+            <div class="metric-icon" style="--ic:#dc2626"><i class="ti ti-flame"></i></div>
+            <div>
+              <p class="metric-label">Fastest warming</p>
+              <strong class="metric-value metric-value--sm" id="metric-fastest">—</strong>
+            </div>
+          </article>
+        </div>
+
+        <!-- DASHBOARD GRID -->
+        <div class="dash-grid">
+          <section class="card dash-card">
+            <div class="card-header">
+              <h3 class="card-title"><i class="ti ti-flame" style="color:#dc2626"></i> Hottest Countries</h3>
+              <button class="btn-link" type="button" data-jump-table="hottest_countries">View all <i class="ti ti-arrow-right"></i></button>
+            </div>
+            <div class="table-scroll">
+              <table id="hottest-preview" class="data-table"></table>
+            </div>
+          </section>
+
+          <section class="card dash-card">
+            <div class="card-header">
+              <h3 class="card-title"><i class="ti ti-trending-up" style="color:#f59e0b"></i> Fastest Warming Regions</h3>
+              <button class="btn-link" type="button" data-jump-table="fastest_warming_regions">View all <i class="ti ti-arrow-right"></i></button>
+            </div>
+            <div class="table-scroll">
+              <table id="fastest-preview" class="data-table"></table>
+            </div>
+          </section>
+
+          <section class="card dash-card dash-card--full">
+            <div class="card-header">
+              <h3 class="card-title"><i class="ti ti-chart-bar" style="color:#2563eb"></i> Regional Warming Snapshot</h3>
+            </div>
+            <div class="bar-list" id="regional-bars">
+              <p class="empty-msg">Loading regional data…</p>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <!-- ── ANALYTICS ── -->
+      <section class="page" id="page-analytics" aria-labelledby="analytics-title">
+        <header class="page-header">
+          <div>
+            <p class="eyebrow">Data Explorer</p>
+            <h2 id="analytics-title">Climate Analytics</h2>
+          </div>
+          <div class="header-actions">
+            <button class="btn-outline" type="button" id="export-table">
+              <i class="ti ti-download"></i> Export CSV
+            </button>
+            <button class="btn-outline" type="button" id="refresh-analytics">
+              <i class="ti ti-refresh"></i> Refresh
+            </button>
+          </div>
+        </header>
+
+        <div class="tab-bar" role="tablist" aria-label="Analytics datasets">
+          <button class="tab active" type="button" role="tab" data-table="yearly_climate_data">Yearly Data</button>
+          <button class="tab" type="button" role="tab" data-table="country_warming_trends">Country Trends</button>
+          <button class="tab" type="button" role="tab" data-table="regional_warming_trends">Regional Trends</button>
+          <button class="tab" type="button" role="tab" data-table="fastest_warming_regions">Fastest Regions</button>
+          <button class="tab" type="button" role="tab" data-table="hottest_countries">Hottest Countries</button>
+        </div>
+
+        <div class="toolbar">
+          <div class="search-wrap">
+            <i class="ti ti-search search-icon" aria-hidden="true"></i>
+            <label class="sr-only" for="table-search">Search table</label>
+            <input id="table-search" class="search-input" type="search" placeholder="Search rows…" autocomplete="off" />
+          </div>
+          <div class="pager">
+            <button class="btn-icon" type="button" id="prev-page" aria-label="Previous page"><i class="ti ti-chevron-left"></i></button>
+            <span class="pager-info" id="table-count">—</span>
+            <button class="btn-icon" type="button" id="next-page" aria-label="Next page"><i class="ti ti-chevron-right"></i></button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="table-scroll table-scroll--large">
+            <table id="analytics-table" class="data-table"></table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── AI ASSISTANT ── -->
+      <section class="page" id="page-assistant" aria-labelledby="assistant-title">
+        <header class="page-header">
+          <div>
+            <p class="eyebrow">Ask EcoLens</p>
+            <h2 id="assistant-title">AI Climate Assistant</h2>
+            <p class="page-sub">Powered by GPT-4o-mini · historical CSV + live weather · multi-turn conversation</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn-outline" type="button" id="clear-chat">
+              <i class="ti ti-trash"></i> Clear
+            </button>
+          </div>
+        </header>
+
+        <!-- QUICK PROMPTS -->
+      <div class="quick-chips" aria-label="Suggested questions" id="quick-chips">
+  <button class="chip" type="button" data-question="Which regions are warming the fastest?">
+    <i class="ti ti-trending-up"></i> Fastest regions
+  </button>
+  <button class="chip" type="button" data-question="What are the top 10 hottest countries by average temperature?">
+    <i class="ti ti-flame"></i> Hottest countries
+  </button>
+  <button class="chip" type="button" data-question="Compare India and China temperature trends">
+    <i class="ti ti-scale"></i> India vs China
+  </button>
+  <button class="chip" type="button" data-question="Summarize global warming trends in this dataset.">
+    <i class="ti ti-world"></i> Global summary
+  </button>
+  <button class="chip" type="button" data-question="What is the weather in London today?">
+    <i class="ti ti-cloud"></i> London weather
+  </button>
+</div> 
+
+        <!-- CHAT CONTAINER -->
+        <div class="chat-container">
+          <div class="chat-history" id="chat-history" aria-live="polite" aria-label="Conversation">
+            <div class="chat-empty" id="chat-empty">
+              <div class="chat-empty-icon"><i class="ti ti-message-bolt"></i></div>
+              <p class="chat-empty-title">Ask EcoLens anything about climate or weather</p>
+              <p class="chat-empty-sub">Try the quick prompts above or type your own question. I can compare countries, analyse warming trends, and look up live weather.</p>
+            </div>
+          </div>
+
+          <div class="chat-input-area">
+            <form class="chat-form" id="chat-form" autocomplete="off">
+              <div class="chat-form-row">
+                <div class="location-wrap">
+                  <i class="ti ti-map-pin location-icon" aria-hidden="true"></i>
+                  <label class="sr-only" for="assistant-location">Optional location</label>
+                  <input id="assistant-location" type="text" placeholder="City (optional)" autocomplete="off" />
+                </div>
+                <div class="question-wrap">
+                  <label class="sr-only" for="question-input">Your question</label>
+                  <textarea id="question-input" rows="2" placeholder="Ask about climate trends, rankings, comparisons or live weather…"></textarea>
+                </div>
+                <button class="btn-send" type="submit" id="send-btn">
+                  <i class="ti ti-send" aria-hidden="true"></i>
+                  <span>Send</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── LIVE WEATHER ── -->
+      <section class="page" id="page-weather" aria-labelledby="weather-title">
+        <header class="page-header">
+          <div>
+            <p class="eyebrow">Current Conditions</p>
+            <h2 id="weather-title">Live Weather</h2>
+            <p class="page-sub">Real-time weather data via Open-Meteo · geocoded automatically</p>
+          </div>
+        </header>
+
+        <form class="lookup-form" id="weather-form">
+          <div class="lookup-input-wrap">
+            <i class="ti ti-search" aria-hidden="true"></i>
+            <label class="sr-only" for="weather-location">Weather location</label>
+            <input id="weather-location" type="text" placeholder="Enter city or country (e.g. Tokyo, Brazil…)" autocomplete="off" required />
+          </div>
+          <button class="btn-primary" type="submit">
+            <i class="ti ti-cloud-download"></i> Get weather
+          </button>
+        </form>
+
+        <div class="weather-result" id="weather-result" aria-live="polite">
+          <div class="empty-state">
+            <i class="ti ti-cloud-rain empty-state-icon"></i>
+            <p>Enter a city or country above to see current conditions.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── ETL PIPELINE ── -->
+      <section class="page" id="page-etl" aria-labelledby="etl-title">
+        <header class="page-header">
+          <div>
+            <p class="eyebrow">Data Pipeline</p>
+            <h2 id="etl-title">ETL Pipeline</h2>
+            <p class="page-sub">Regenerate all processed CSV datasets from raw climate data</p>
+          </div>
+        </header>
+
+        <div class="card etl-card">
+  <div class="etl-info">
+    <i class="ti ti-database-cog etl-icon"></i>
+    <div>
+      <h3 class="etl-heading">Regenerate processed datasets</h3>
+      <p class="etl-desc">Runs the backend ETL job and rebuilds all processed CSVs — country trends, regional trends, hottest countries, and fastest warming regions. Analytics auto-refresh when done.</p>
+    </div>
+  </div>
+  <button class="btn-primary" type="button" id="run-etl">
+    <i class="ti ti-player-play"></i> Run ETL
+  </button> 
+  <!-- Active dataset indicator -->
+  <div id="active-dataset-pill" style="display:none; margin-top:12px; padding: 8px 12px; background: #ecfdf5; border: 1px solid #059669; border-radius: 8px; cursor: pointer;" title="Click to revert to default climate data">
+    <div style="font-size: 10px; font-weight: 600; color: #059669; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 3px;">Active Dataset</div>
+    <div style="display: flex; align-items: center; gap: 6px;">
+      <i class="ti ti-file-text" style="color: #059669; font-size: 13px;"></i>
+      <span id="active-dataset-name" style="font-size: 12px; font-weight: 600; color: #111827; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 300px;"></span>
+    </div>
+    <div style="font-size: 10px; color: #6b7280; margin-top: 3px;">Click to revert to default climate data</div>
+  </div> 
+
+  <!-- NEW: Upload any CSV section -->
+  <div class="etl-upload-section" style="margin-top:16px; padding-top:16px; border-top:1px solid var(--border);">
+    <div class="etl-info">
+      <i class="ti ti-upload etl-icon"></i>
+      <div>
+        <h3 class="etl-heading">Upload a CSV file</h3>
+        <p class="etl-desc">Upload a climate or weather CSV file (must have country, region, year, temperature columns). Dashboard and AI Assistant will switch to the uploaded data automatically.</p> 
+      </div>
+    </div>
+    <input type="file" id="csv-upload" accept=".csv" style="margin-bottom:10px;" />
+    <div style="display:flex; gap:10px;">
+      <button class="btn-primary" type="button" id="run-upload-etl">
+        <i class="ti ti-player-play"></i> Run ETL on Uploaded CSV
+      </button>
+      <button class="btn-outline" type="button" id="reset-to-default">
+        <i class="ti ti-refresh"></i> Use Default Climate Data
+      </button>
+    </div>
+  </div> 
+  <!-- Uploaded datasets history -->
+  <div id="upload-history-section" style="margin-top:16px; padding-top:16px; border-top:1px solid var(--border); display:none;">
+    <h3 class="etl-heading" style="margin-bottom:8px;">
+      <i class="ti ti-history" style="color:#059669;"></i> Uploaded Datasets
+    </h3>
+    <p class="etl-desc" style="margin-bottom:10px;">All previously uploaded climate CSVs. Click any to switch the active dataset.</p>
+    <div id="upload-history-list" style="display:flex; flex-direction:column; gap:6px;"></div>
+  </div> 
+
+  <pre class="json-output" id="etl-output">No ETL run in this session.</pre>
+ </div>  
+      </section>
+
+    </main><!-- /shell -->
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script>
+      // ── Auth guard: redirect to login if not authenticated ──
+      (async function guardDashboard() {
+        // Set API base input dynamically based on current origin
+        const apiInput = document.getElementById("api-base");
+        if (apiInput) apiInput.value = window.location.origin;
+
+        try {
+          const res = await fetch(window.location.origin + "/me", { credentials: "include" });
+          const data = await res.json();
+          if (!data.authenticated) {
+            window.location.replace("login.html");
+          }
+        } catch (e) {
+          window.location.replace("login.html");
+        }
+      })();
+    </script>
+
+    <script src="js/app.js"></script>
+  </body>
+</html> 

@@ -1,0 +1,30 @@
+{
+  "active_source": "default",
+  "filename": "climate_data.csv",
+  "row_count": 1344,
+  "columns": [
+    "Country",
+    "Region",
+    "Year",
+    "AvgTemperature",
+    "TempChange",
+    "BaselineTemperature",
+    "TotalTempChange",
+    "RegionalAverageTemperature",
+    "RegionalTempChange"
+  ],
+  "numeric_columns": [
+    "Year",
+    "AvgTemperature",
+    "TempChange",
+    "BaselineTemperature",
+    "TotalTempChange",
+    "RegionalAverageTemperature",
+    "RegionalTempChange"
+  ],
+  "categorical_columns": [
+    "Country",
+    "Region"
+  ],
+  "date_columns": []
+}

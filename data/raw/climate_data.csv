@@ -1,0 +1,1345 @@
+﻿Country,Region,Year,AvgTemperature
+Afghanistan,Asia,2000,12.59°C
+Afghanistan,Asia,2001,13.41°C
+Afghanistan,Asia,2002,13.05°C
+Afghanistan,Asia,2003,12.49°C
+Afghanistan,Asia,2004,13.23°C
+Afghanistan,Asia,2005,11.97°C
+Afghanistan,Asia,2006,13.43°C
+Afghanistan,Asia,2007,12.56°C
+Afghanistan,Asia,2008,12.71°C
+Afghanistan,Asia,2009,12.35°C
+Afghanistan,Asia,2010,13.42°C
+Afghanistan,Asia,2011,13.0°C
+Afghanistan,Asia,2012,11.63°C
+Afghanistan,Asia,2013,12.84°C
+Afghanistan,Asia,2014,12.3°C
+Afghanistan,Asia,2015,12.98°C
+Afghanistan,Asia,2016,13.77°C
+Afghanistan,Asia,2017,13.53°C
+Afghanistan,Asia,2018,13.74°C
+Afghanistan,Asia,2019,12.96°C
+Afghanistan,Asia,2020,12.36°C
+Afghanistan,Asia,2021,13.98°C
+Afghanistan,Asia,2022,13.75°C
+Afghanistan,Asia,2023,13.84°C
+Argentina,South America,2000,13.85°C
+Argentina,South America,2001,14.55°C
+Argentina,South America,2002,14.35°C
+Argentina,South America,2003,14.86°C
+Argentina,South America,2004,14.82°C
+Argentina,South America,2005,14.47°C
+Argentina,South America,2006,15.05°C
+Argentina,South America,2007,14.09°C
+Argentina,South America,2008,14.99°C
+Argentina,South America,2009,15.08°C
+Argentina,South America,2010,14.49°C
+Argentina,South America,2011,14.76°C
+Argentina,South America,2012,15.19°C
+Argentina,South America,2013,15.06°C
+Argentina,South America,2014,14.98°C
+Argentina,South America,2015,15.12°C
+Argentina,South America,2016,14.62°C
+Argentina,South America,2017,15.13°C
+Argentina,South America,2018,14.94°C
+Argentina,South America,2019,15.0°C
+Argentina,South America,2020,15.25°C
+Argentina,South America,2021,15.23°C
+Argentina,South America,2022,14.76°C
+Argentina,South America,2023,15.65°C
+Australia,Oceania,2000,21.29°C
+Australia,Oceania,2001,21.46°C
+Australia,Oceania,2002,22.31°C
+Australia,Oceania,2003,22.22°C
+Australia,Oceania,2004,22.08°C
+Australia,Oceania,2005,22.73°C
+Australia,Oceania,2006,22.05°C
+Australia,Oceania,2007,22.27°C
+Australia,Oceania,2008,22.01°C
+Australia,Oceania,2009,22.49°C
+Australia,Oceania,2010,21.75°C
+Australia,Oceania,2011,21.35°C
+Australia,Oceania,2012,21.74°C
+Australia,Oceania,2013,22.9°C
+Australia,Oceania,2014,22.59°C
+Australia,Oceania,2015,22.51°C
+Australia,Oceania,2016,22.4°C
+Australia,Oceania,2017,22.47°C
+Australia,Oceania,2018,22.6°C
+Australia,Oceania,2019,23.13°C
+Australia,Oceania,2020,22.58°C
+Australia,Oceania,2021,21.96°C
+Australia,Oceania,2022,21.87°C
+Australia,Oceania,2023,22.43°C
+Bangladesh,Asia,2000,24.98°C
+Bangladesh,Asia,2001,25.19°C
+Bangladesh,Asia,2002,25.2°C
+Bangladesh,Asia,2003,25.18°C
+Bangladesh,Asia,2004,25.29°C
+Bangladesh,Asia,2005,25.62°C
+Bangladesh,Asia,2006,25.79°C
+Bangladesh,Asia,2007,25.27°C
+Bangladesh,Asia,2008,25.42°C
+Bangladesh,Asia,2009,25.95°C
+Bangladesh,Asia,2010,26.0°C
+Bangladesh,Asia,2011,25.24°C
+Bangladesh,Asia,2012,25.33°C
+Bangladesh,Asia,2013,25.3°C
+Bangladesh,Asia,2014,25.45°C
+Bangladesh,Asia,2015,25.45°C
+Bangladesh,Asia,2016,25.91°C
+Bangladesh,Asia,2017,25.57°C
+Bangladesh,Asia,2018,25.34°C
+Bangladesh,Asia,2019,25.77°C
+Bangladesh,Asia,2020,25.39°C
+Bangladesh,Asia,2021,25.84°C
+Bangladesh,Asia,2022,25.8°C
+Bangladesh,Asia,2023,26.11°C
+Brazil,South America,2000,24.47°C
+Brazil,South America,2001,24.79°C
+Brazil,South America,2002,25.19°C
+Brazil,South America,2003,24.97°C
+Brazil,South America,2004,24.85°C
+Brazil,South America,2005,25.17°C
+Brazil,South America,2006,24.94°C
+Brazil,South America,2007,25.14°C
+Brazil,South America,2008,24.79°C
+Brazil,South America,2009,25.01°C
+Brazil,South America,2010,25.33°C
+Brazil,South America,2011,24.89°C
+Brazil,South America,2012,25.17°C
+Brazil,South America,2013,25.06°C
+Brazil,South America,2014,25.17°C
+Brazil,South America,2015,25.68°C
+Brazil,South America,2016,25.56°C
+Brazil,South America,2017,25.38°C
+Brazil,South America,2018,25.09°C
+Brazil,South America,2019,25.53°C
+Brazil,South America,2020,25.19°C
+Brazil,South America,2021,24.97°C
+Brazil,South America,2022,24.79°C
+Brazil,South America,2023,25.54°C
+China,Asia,2000,6.79°C
+China,Asia,2001,7.18°C
+China,Asia,2002,7.31°C
+China,Asia,2003,7.11°C
+China,Asia,2004,7.28°C
+China,Asia,2005,6.94°C
+China,Asia,2006,7.52°C
+China,Asia,2007,7.72°C
+China,Asia,2008,7.18°C
+China,Asia,2009,7.4°C
+China,Asia,2010,7.18°C
+China,Asia,2011,6.91°C
+China,Asia,2012,6.63°C
+China,Asia,2013,7.39°C
+China,Asia,2014,7.31°C
+China,Asia,2015,7.66°C
+China,Asia,2016,7.76°C
+China,Asia,2017,7.77°C
+China,Asia,2018,7.43°C
+China,Asia,2019,7.57°C
+China,Asia,2020,7.61°C
+China,Asia,2021,7.82°C
+China,Asia,2022,7.78°C
+China,Asia,2023,7.97°C
+Colombia,South America,2000,23.29°C
+Colombia,South America,2001,23.49°C
+Colombia,South America,2002,23.74°C
+Colombia,South America,2003,23.74°C
+Colombia,South America,2004,23.79°C
+Colombia,South America,2005,24.01°C
+Colombia,South America,2006,23.81°C
+Colombia,South America,2007,23.93°C
+Colombia,South America,2008,23.74°C
+Colombia,South America,2009,24.03°C
+Colombia,South America,2010,24.28°C
+Colombia,South America,2011,23.88°C
+Colombia,South America,2012,23.88°C
+Colombia,South America,2013,24.04°C
+Colombia,South America,2014,24.19°C
+Colombia,South America,2015,24.42°C
+Colombia,South America,2016,24.55°C
+Colombia,South America,2017,24.29°C
+Colombia,South America,2018,24.11°C
+Colombia,South America,2019,24.39°C
+Colombia,South America,2020,24.52°C
+Colombia,South America,2021,24.1°C
+Colombia,South America,2022,23.94°C
+Colombia,South America,2023,24.68°C
+Denmark,Europe,2000,9.37°C
+Denmark,Europe,2001,8.39°C
+Denmark,Europe,2002,9.27°C
+Denmark,Europe,2003,8.73°C
+Denmark,Europe,2004,8.78°C
+Denmark,Europe,2005,8.81°C
+Denmark,Europe,2006,9.47°C
+Denmark,Europe,2007,9.53°C
+Denmark,Europe,2008,9.51°C
+Denmark,Europe,2009,8.93°C
+Denmark,Europe,2010,7.03°C
+Denmark,Europe,2011,9.03°C
+Denmark,Europe,2012,8.41°C
+Denmark,Europe,2013,8.46°C
+Denmark,Europe,2014,10.14°C
+Denmark,Europe,2015,9.28°C
+Denmark,Europe,2016,9.25°C
+Denmark,Europe,2017,9.13°C
+Denmark,Europe,2018,9.68°C
+Denmark,Europe,2019,9.69°C
+Denmark,Europe,2020,10.08°C
+Denmark,Europe,2021,8.94°C
+Denmark,Europe,2022,9.67°C
+Denmark,Europe,2023,9.52°C
+Egypt,Africa,2000,22.31°C
+Egypt,Africa,2001,23.0°C
+Egypt,Africa,2002,23.15°C
+Egypt,Africa,2003,22.93°C
+Egypt,Africa,2004,22.94°C
+Egypt,Africa,2005,23.01°C
+Egypt,Africa,2006,22.93°C
+Egypt,Africa,2007,23.05°C
+Egypt,Africa,2008,23.35°C
+Egypt,Africa,2009,23.21°C
+Egypt,Africa,2010,24.68°C
+Egypt,Africa,2011,22.65°C
+Egypt,Africa,2012,23.26°C
+Egypt,Africa,2013,23.31°C
+Egypt,Africa,2014,23.62°C
+Egypt,Africa,2015,23.35°C
+Egypt,Africa,2016,23.73°C
+Egypt,Africa,2017,23.01°C
+Egypt,Africa,2018,24.1°C
+Egypt,Africa,2019,23.37°C
+Egypt,Africa,2020,23.16°C
+Egypt,Africa,2021,23.62°C
+Egypt,Africa,2022,22.95°C
+Egypt,Africa,2023,23.84°C
+France,Europe,2000,13.51°C
+France,Europe,2001,13.21°C
+France,Europe,2002,13.6°C
+France,Europe,2003,13.91°C
+France,Europe,2004,13.19°C
+France,Europe,2005,13.19°C
+France,Europe,2006,13.7°C
+France,Europe,2007,13.41°C
+France,Europe,2008,13.1°C
+France,Europe,2009,13.53°C
+France,Europe,2010,12.61°C
+France,Europe,2011,14.11°C
+France,Europe,2012,13.36°C
+France,Europe,2013,12.96°C
+France,Europe,2014,14.14°C
+France,Europe,2015,13.99°C
+France,Europe,2016,13.61°C
+France,Europe,2017,13.77°C
+France,Europe,2018,14.22°C
+France,Europe,2019,14.08°C
+France,Europe,2020,14.51°C
+France,Europe,2021,13.36°C
+France,Europe,2022,14.76°C
+France,Europe,2023,14.68°C
+Georgia,Asia,2000,7.51°C
+Georgia,Asia,2001,8.14°C
+Georgia,Asia,2002,7.76°C
+Georgia,Asia,2003,7.18°C
+Georgia,Asia,2004,7.69°C
+Georgia,Asia,2005,7.96°C
+Georgia,Asia,2006,8.06°C
+Georgia,Asia,2007,7.98°C
+Georgia,Asia,2008,8.04°C
+Georgia,Asia,2009,8.26°C
+Georgia,Asia,2010,10.11°C
+Georgia,Asia,2011,7.3°C
+Georgia,Asia,2012,8.64°C
+Georgia,Asia,2013,8.25°C
+Georgia,Asia,2014,9.09°C
+Georgia,Asia,2015,9.08°C
+Georgia,Asia,2016,8.4°C
+Georgia,Asia,2017,8.57°C
+Georgia,Asia,2018,9.82°C
+Georgia,Asia,2019,9.15°C
+Georgia,Asia,2020,9.05°C
+Georgia,Asia,2021,9.04°C
+Georgia,Asia,2022,8.71°C
+Georgia,Asia,2023,9.36°C
+Germany,Europe,2000,9.9°C
+Germany,Europe,2001,9.04°C
+Germany,Europe,2002,9.61°C
+Germany,Europe,2003,9.48°C
+Germany,Europe,2004,9.05°C
+Germany,Europe,2005,9.14°C
+Germany,Europe,2006,9.7°C
+Germany,Europe,2007,10.02°C
+Germany,Europe,2008,9.65°C
+Germany,Europe,2009,9.35°C
+Germany,Europe,2010,8.01°C
+Germany,Europe,2011,9.8°C
+Germany,Europe,2012,9.24°C
+Germany,Europe,2013,8.84°C
+Germany,Europe,2014,10.47°C
+Germany,Europe,2015,10.07°C
+Germany,Europe,2016,9.68°C
+Germany,Europe,2017,9.71°C
+Germany,Europe,2018,10.61°C
+Germany,Europe,2019,10.42°C
+Germany,Europe,2020,10.54°C
+Germany,Europe,2021,9.24°C
+Germany,Europe,2022,10.62°C
+Germany,Europe,2023,10.71°C
+Guyana,South America,2000,24.77°C
+Guyana,South America,2001,25.03°C
+Guyana,South America,2002,25.29°C
+Guyana,South America,2003,25.42°C
+Guyana,South America,2004,25.35°C
+Guyana,South America,2005,25.64°C
+Guyana,South America,2006,25.2°C
+Guyana,South America,2007,25.07°C
+Guyana,South America,2008,24.89°C
+Guyana,South America,2009,25.43°C
+Guyana,South America,2010,25.41°C
+Guyana,South America,2011,25.28°C
+Guyana,South America,2012,25.32°C
+Guyana,South America,2013,25.17°C
+Guyana,South America,2014,25.25°C
+Guyana,South America,2015,25.49°C
+Guyana,South America,2016,25.76°C
+Guyana,South America,2017,25.64°C
+Guyana,South America,2018,25.3°C
+Guyana,South America,2019,25.59°C
+Guyana,South America,2020,25.68°C
+Guyana,South America,2021,25.29°C
+Guyana,South America,2022,25.14°C
+Guyana,South America,2023,26.04°C
+India,Asia,2000,23.94°C
+India,Asia,2001,24.02°C
+India,Asia,2002,24.38°C
+India,Asia,2003,24.12°C
+India,Asia,2004,24.17°C
+India,Asia,2005,24.09°C
+India,Asia,2006,24.34°C
+India,Asia,2007,24.22°C
+India,Asia,2008,23.99°C
+India,Asia,2009,24.7°C
+India,Asia,2010,24.66°C
+India,Asia,2011,24.01°C
+India,Asia,2012,24.12°C
+India,Asia,2013,23.93°C
+India,Asia,2014,24.16°C
+India,Asia,2015,24.44°C
+India,Asia,2016,24.82°C
+India,Asia,2017,24.68°C
+India,Asia,2018,24.49°C
+India,Asia,2019,24.45°C
+India,Asia,2020,24.16°C
+India,Asia,2021,24.26°C
+India,Asia,2022,24.44°C
+India,Asia,2023,24.44°C
+Indonesia,Asia,2000,24.83°C
+Indonesia,Asia,2001,24.93°C
+Indonesia,Asia,2002,25.09°C
+Indonesia,Asia,2003,25.05°C
+Indonesia,Asia,2004,25.05°C
+Indonesia,Asia,2005,25.12°C
+Indonesia,Asia,2006,25.1°C
+Indonesia,Asia,2007,25.1°C
+Indonesia,Asia,2008,24.93°C
+Indonesia,Asia,2009,25.3°C
+Indonesia,Asia,2010,25.42°C
+Indonesia,Asia,2011,25.1°C
+Indonesia,Asia,2012,25.17°C
+Indonesia,Asia,2013,25.29°C
+Indonesia,Asia,2014,25.35°C
+Indonesia,Asia,2015,25.46°C
+Indonesia,Asia,2016,25.77°C
+Indonesia,Asia,2017,25.43°C
+Indonesia,Asia,2018,25.44°C
+Indonesia,Asia,2019,25.57°C
+Indonesia,Asia,2020,25.66°C
+Indonesia,Asia,2021,25.48°C
+Indonesia,Asia,2022,25.43°C
+Indonesia,Asia,2023,25.73°C
+Iran,Asia,2000,18.36°C
+Iran,Asia,2001,19.02°C
+Iran,Asia,2002,18.58°C
+Iran,Asia,2003,18.32°C
+Iran,Asia,2004,18.55°C
+Iran,Asia,2005,18.26°C
+Iran,Asia,2006,18.62°C
+Iran,Asia,2007,18.12°C
+Iran,Asia,2008,18.37°C
+Iran,Asia,2009,18.49°C
+Iran,Asia,2010,19.49°C
+Iran,Asia,2011,18.38°C
+Iran,Asia,2012,18.15°C
+Iran,Asia,2013,18.7°C
+Iran,Asia,2014,18.4°C
+Iran,Asia,2015,19.07°C
+Iran,Asia,2016,19.17°C
+Iran,Asia,2017,19.02°C
+Iran,Asia,2018,19.46°C
+Iran,Asia,2019,18.74°C
+Iran,Asia,2020,18.34°C
+Iran,Asia,2021,19.74°C
+Iran,Asia,2022,19.53°C
+Iran,Asia,2023,19.7°C
+Iraq,Asia,2000,22.97°C
+Iraq,Asia,2001,23.46°C
+Iraq,Asia,2002,22.96°C
+Iraq,Asia,2003,22.94°C
+Iraq,Asia,2004,22.89°C
+Iraq,Asia,2005,22.96°C
+Iraq,Asia,2006,23.13°C
+Iraq,Asia,2007,23.14°C
+Iraq,Asia,2008,23.17°C
+Iraq,Asia,2009,23.02°C
+Iraq,Asia,2010,24.62°C
+Iraq,Asia,2011,22.34°C
+Iraq,Asia,2012,23.31°C
+Iraq,Asia,2013,22.71°C
+Iraq,Asia,2014,23.36°C
+Iraq,Asia,2015,23.49°C
+Iraq,Asia,2016,23.54°C
+Iraq,Asia,2017,23.69°C
+Iraq,Asia,2018,24.04°C
+Iraq,Asia,2019,23.44°C
+Iraq,Asia,2020,23.82°C
+Iraq,Asia,2021,24.52°C
+Iraq,Asia,2022,23.95°C
+Iraq,Asia,2023,24.0°C
+Ireland,Europe,2000,9.72°C
+Ireland,Europe,2001,9.62°C
+Ireland,Europe,2002,10.05°C
+Ireland,Europe,2003,10.12°C
+Ireland,Europe,2004,10.02°C
+Ireland,Europe,2005,10.19°C
+Ireland,Europe,2006,10.25°C
+Ireland,Europe,2007,10.45°C
+Ireland,Europe,2008,9.72°C
+Ireland,Europe,2009,9.68°C
+Ireland,Europe,2010,8.69°C
+Ireland,Europe,2011,9.94°C
+Ireland,Europe,2012,9.67°C
+Ireland,Europe,2013,9.69°C
+Ireland,Europe,2014,10.2°C
+Ireland,Europe,2015,9.56°C
+Ireland,Europe,2016,9.87°C
+Ireland,Europe,2017,10.19°C
+Ireland,Europe,2018,10.0°C
+Ireland,Europe,2019,10.08°C
+Ireland,Europe,2020,10.01°C
+Ireland,Europe,2021,10.22°C
+Ireland,Europe,2022,10.48°C
+Ireland,Europe,2023,10.87°C
+Israel,Asia,2000,19.82°C
+Israel,Asia,2001,20.45°C
+Israel,Asia,2002,20.39°C
+Israel,Asia,2003,20.22°C
+Israel,Asia,2004,20.03°C
+Israel,Asia,2005,19.93°C
+Israel,Asia,2006,19.82°C
+Israel,Asia,2007,20.19°C
+Israel,Asia,2008,20.49°C
+Israel,Asia,2009,20.6°C
+Israel,Asia,2010,21.95°C
+Israel,Asia,2011,19.99°C
+Israel,Asia,2012,20.69°C
+Israel,Asia,2013,20.49°C
+Israel,Asia,2014,20.58°C
+Israel,Asia,2015,20.53°C
+Israel,Asia,2016,21.02°C
+Israel,Asia,2017,20.69°C
+Israel,Asia,2018,21.55°C
+Israel,Asia,2019,20.81°C
+Israel,Asia,2020,21.03°C
+Israel,Asia,2021,21.31°C
+Israel,Asia,2022,20.62°C
+Israel,Asia,2023,21.4°C
+Italy,Europe,2000,13.33°C
+Italy,Europe,2001,13.12°C
+Italy,Europe,2002,13.15°C
+Italy,Europe,2003,13.38°C
+Italy,Europe,2004,12.82°C
+Italy,Europe,2005,12.27°C
+Italy,Europe,2006,13.01°C
+Italy,Europe,2007,13.38°C
+Italy,Europe,2008,13.25°C
+Italy,Europe,2009,13.25°C
+Italy,Europe,2010,12.57°C
+Italy,Europe,2011,13.38°C
+Italy,Europe,2012,13.41°C
+Italy,Europe,2013,13.07°C
+Italy,Europe,2014,13.72°C
+Italy,Europe,2015,13.73°C
+Italy,Europe,2016,13.55°C
+Italy,Europe,2017,13.5°C
+Italy,Europe,2018,13.81°C
+Italy,Europe,2019,13.72°C
+Italy,Europe,2020,13.71°C
+Italy,Europe,2021,13.43°C
+Italy,Europe,2022,14.37°C
+Italy,Europe,2023,14.33°C
+Japan,Asia,2000,11.88°C
+Japan,Asia,2001,11.51°C
+Japan,Asia,2002,11.91°C
+Japan,Asia,2003,11.67°C
+Japan,Asia,2004,12.53°C
+Japan,Asia,2005,11.65°C
+Japan,Asia,2006,11.93°C
+Japan,Asia,2007,12.32°C
+Japan,Asia,2008,12.05°C
+Japan,Asia,2009,12.11°C
+Japan,Asia,2010,12.37°C
+Japan,Asia,2011,11.86°C
+Japan,Asia,2012,11.69°C
+Japan,Asia,2013,12.06°C
+Japan,Asia,2014,11.81°C
+Japan,Asia,2015,12.54°C
+Japan,Asia,2016,12.61°C
+Japan,Asia,2017,11.92°C
+Japan,Asia,2018,12.54°C
+Japan,Asia,2019,12.66°C
+Japan,Asia,2020,12.75°C
+Japan,Asia,2021,12.75°C
+Japan,Asia,2022,12.69°C
+Japan,Asia,2023,13.43°C
+Jordan,Asia,2000,18.99°C
+Jordan,Asia,2001,19.6°C
+Jordan,Asia,2002,19.13°C
+Jordan,Asia,2003,19.15°C
+Jordan,Asia,2004,19.16°C
+Jordan,Asia,2005,19.01°C
+Jordan,Asia,2006,18.97°C
+Jordan,Asia,2007,19.28°C
+Jordan,Asia,2008,19.43°C
+Jordan,Asia,2009,19.41°C
+Jordan,Asia,2010,21.29°C
+Jordan,Asia,2011,18.9°C
+Jordan,Asia,2012,19.85°C
+Jordan,Asia,2013,19.44°C
+Jordan,Asia,2014,19.66°C
+Jordan,Asia,2015,19.7°C
+Jordan,Asia,2016,20.15°C
+Jordan,Asia,2017,20.1°C
+Jordan,Asia,2018,20.51°C
+Jordan,Asia,2019,19.88°C
+Jordan,Asia,2020,20.33°C
+Jordan,Asia,2021,20.63°C
+Jordan,Asia,2022,20.08°C
+Jordan,Asia,2023,20.57°C
+Kazakhstan,Asia,2000,6.96°C
+Kazakhstan,Asia,2001,7.03°C
+Kazakhstan,Asia,2002,7.62°C
+Kazakhstan,Asia,2003,6.36°C
+Kazakhstan,Asia,2004,7.83°C
+Kazakhstan,Asia,2005,7.46°C
+Kazakhstan,Asia,2006,7.35°C
+Kazakhstan,Asia,2007,7.7°C
+Kazakhstan,Asia,2008,7.55°C
+Kazakhstan,Asia,2009,6.86°C
+Kazakhstan,Asia,2010,7.17°C
+Kazakhstan,Asia,2011,6.2°C
+Kazakhstan,Asia,2012,6.65°C
+Kazakhstan,Asia,2013,8.12°C
+Kazakhstan,Asia,2014,6.19°C
+Kazakhstan,Asia,2015,7.77°C
+Kazakhstan,Asia,2016,7.69°C
+Kazakhstan,Asia,2017,7.51°C
+Kazakhstan,Asia,2018,6.27°C
+Kazakhstan,Asia,2019,7.71°C
+Kazakhstan,Asia,2020,7.91°C
+Kazakhstan,Asia,2021,7.67°C
+Kazakhstan,Asia,2022,7.81°C
+Kazakhstan,Asia,2023,8.69°C
+Kuwait,Asia,2000,26.02°C
+Kuwait,Asia,2001,26.57°C
+Kuwait,Asia,2002,26.27°C
+Kuwait,Asia,2003,26.3°C
+Kuwait,Asia,2004,26.1°C
+Kuwait,Asia,2005,26.06°C
+Kuwait,Asia,2006,26.38°C
+Kuwait,Asia,2007,26.18°C
+Kuwait,Asia,2008,26.16°C
+Kuwait,Asia,2009,26.11°C
+Kuwait,Asia,2010,27.46°C
+Kuwait,Asia,2011,25.73°C
+Kuwait,Asia,2012,26.36°C
+Kuwait,Asia,2013,25.93°C
+Kuwait,Asia,2014,26.56°C
+Kuwait,Asia,2015,26.88°C
+Kuwait,Asia,2016,26.78°C
+Kuwait,Asia,2017,26.97°C
+Kuwait,Asia,2018,27.31°C
+Kuwait,Asia,2019,26.84°C
+Kuwait,Asia,2020,26.94°C
+Kuwait,Asia,2021,27.7°C
+Kuwait,Asia,2022,27.15°C
+Kuwait,Asia,2023,26.96°C
+Malaysia,Asia,2000,25.29°C
+Malaysia,Asia,2001,25.36°C
+Malaysia,Asia,2002,25.63°C
+Malaysia,Asia,2003,25.51°C
+Malaysia,Asia,2004,25.54°C
+Malaysia,Asia,2005,25.69°C
+Malaysia,Asia,2006,25.43°C
+Malaysia,Asia,2007,25.41°C
+Malaysia,Asia,2008,25.22°C
+Malaysia,Asia,2009,25.59°C
+Malaysia,Asia,2010,25.8°C
+Malaysia,Asia,2011,25.42°C
+Malaysia,Asia,2012,25.5°C
+Malaysia,Asia,2013,25.65°C
+Malaysia,Asia,2014,25.61°C
+Malaysia,Asia,2015,25.84°C
+Malaysia,Asia,2016,26.29°C
+Malaysia,Asia,2017,25.81°C
+Malaysia,Asia,2018,25.86°C
+Malaysia,Asia,2019,26.15°C
+Malaysia,Asia,2020,26.03°C
+Malaysia,Asia,2021,25.73°C
+Malaysia,Asia,2022,25.64°C
+Malaysia,Asia,2023,26.09°C
+Mauritius,Africa,2000,22.91°C
+Mauritius,Africa,2001,23.32°C
+Mauritius,Africa,2002,23.61°C
+Mauritius,Africa,2003,23.94°C
+Mauritius,Africa,2004,23.68°C
+Mauritius,Africa,2005,23.7°C
+Mauritius,Africa,2006,23.78°C
+Mauritius,Africa,2007,23.49°C
+Mauritius,Africa,2008,23.4°C
+Mauritius,Africa,2009,23.81°C
+Mauritius,Africa,2010,23.9°C
+Mauritius,Africa,2011,23.78°C
+Mauritius,Africa,2012,23.62°C
+Mauritius,Africa,2013,23.78°C
+Mauritius,Africa,2014,24.05°C
+Mauritius,Africa,2015,24.1°C
+Mauritius,Africa,2016,23.77°C
+Mauritius,Africa,2017,23.99°C
+Mauritius,Africa,2018,23.86°C
+Mauritius,Africa,2019,24.16°C
+Mauritius,Africa,2020,23.45°C
+Mauritius,Africa,2021,23.72°C
+Mauritius,Africa,2022,23.31°C
+Mauritius,Africa,2023,24.07°C
+Mexico,North America,2000,20.79°C
+Mexico,North America,2001,20.66°C
+Mexico,North America,2002,20.8°C
+Mexico,North America,2003,20.86°C
+Mexico,North America,2004,20.35°C
+Mexico,North America,2005,20.95°C
+Mexico,North America,2006,21.02°C
+Mexico,North America,2007,20.68°C
+Mexico,North America,2008,20.72°C
+Mexico,North America,2009,21.17°C
+Mexico,North America,2010,20.44°C
+Mexico,North America,2011,21.25°C
+Mexico,North America,2012,21.23°C
+Mexico,North America,2013,20.79°C
+Mexico,North America,2014,20.98°C
+Mexico,North America,2015,21.05°C
+Mexico,North America,2016,21.23°C
+Mexico,North America,2017,21.38°C
+Mexico,North America,2018,21.06°C
+Mexico,North America,2019,21.34°C
+Mexico,North America,2020,21.58°C
+Mexico,North America,2021,21.24°C
+Mexico,North America,2022,20.96°C
+Mexico,North America,2023,21.68°C
+Myanmar,Asia,2000,23.22°C
+Myanmar,Asia,2001,23.5°C
+Myanmar,Asia,2002,23.52°C
+Myanmar,Asia,2003,23.58°C
+Myanmar,Asia,2004,23.35°C
+Myanmar,Asia,2005,23.98°C
+Myanmar,Asia,2006,23.57°C
+Myanmar,Asia,2007,23.36°C
+Myanmar,Asia,2008,23.43°C
+Myanmar,Asia,2009,23.97°C
+Myanmar,Asia,2010,24.23°C
+Myanmar,Asia,2011,23.37°C
+Myanmar,Asia,2012,23.82°C
+Myanmar,Asia,2013,23.77°C
+Myanmar,Asia,2014,23.97°C
+Myanmar,Asia,2015,23.8°C
+Myanmar,Asia,2016,24.03°C
+Myanmar,Asia,2017,23.87°C
+Myanmar,Asia,2018,23.57°C
+Myanmar,Asia,2019,24.13°C
+Myanmar,Asia,2020,24.13°C
+Myanmar,Asia,2021,24.25°C
+Myanmar,Asia,2022,23.99°C
+Myanmar,Asia,2023,24.38°C
+Nepal,Asia,2000,12.79°C
+Nepal,Asia,2001,13.15°C
+Nepal,Asia,2002,12.93°C
+Nepal,Asia,2003,12.91°C
+Nepal,Asia,2004,13.15°C
+Nepal,Asia,2005,13.18°C
+Nepal,Asia,2006,13.64°C
+Nepal,Asia,2007,13.32°C
+Nepal,Asia,2008,13.22°C
+Nepal,Asia,2009,13.72°C
+Nepal,Asia,2010,13.83°C
+Nepal,Asia,2011,12.99°C
+Nepal,Asia,2012,12.83°C
+Nepal,Asia,2013,13.19°C
+Nepal,Asia,2014,13.01°C
+Nepal,Asia,2015,13.17°C
+Nepal,Asia,2016,14.05°C
+Nepal,Asia,2017,13.73°C
+Nepal,Asia,2018,13.38°C
+Nepal,Asia,2019,13.12°C
+Nepal,Asia,2020,12.97°C
+Nepal,Asia,2021,13.57°C
+Nepal,Asia,2022,13.71°C
+Nepal,Asia,2023,13.67°C
+Netherlands,Europe,2000,10.82°C
+Netherlands,Europe,2001,10.31°C
+Netherlands,Europe,2002,10.74°C
+Netherlands,Europe,2003,10.43°C
+Netherlands,Europe,2004,10.38°C
+Netherlands,Europe,2005,10.58°C
+Netherlands,Europe,2006,11.07°C
+Netherlands,Europe,2007,11.15°C
+Netherlands,Europe,2008,10.54°C
+Netherlands,Europe,2009,10.46°C
+Netherlands,Europe,2010,9.0°C
+Netherlands,Europe,2011,10.78°C
+Netherlands,Europe,2012,10.17°C
+Netherlands,Europe,2013,9.7°C
+Netherlands,Europe,2014,11.58°C
+Netherlands,Europe,2015,10.77°C
+Netherlands,Europe,2016,10.67°C
+Netherlands,Europe,2017,10.87°C
+Netherlands,Europe,2018,11.25°C
+Netherlands,Europe,2019,11.18°C
+Netherlands,Europe,2020,11.58°C
+Netherlands,Europe,2021,10.37°C
+Netherlands,Europe,2022,11.54°C
+Netherlands,Europe,2023,11.64°C
+New Zealand,Oceania,2000,10.39°C
+New Zealand,Oceania,2001,10.46°C
+New Zealand,Oceania,2002,10.22°C
+New Zealand,Oceania,2003,10.19°C
+New Zealand,Oceania,2004,9.7°C
+New Zealand,Oceania,2005,10.82°C
+New Zealand,Oceania,2006,9.93°C
+New Zealand,Oceania,2007,10.39°C
+New Zealand,Oceania,2008,10.48°C
+New Zealand,Oceania,2009,9.9°C
+New Zealand,Oceania,2010,10.69°C
+New Zealand,Oceania,2011,10.52°C
+New Zealand,Oceania,2012,10.1°C
+New Zealand,Oceania,2013,10.99°C
+New Zealand,Oceania,2014,10.46°C
+New Zealand,Oceania,2015,10.32°C
+New Zealand,Oceania,2016,11.06°C
+New Zealand,Oceania,2017,10.89°C
+New Zealand,Oceania,2018,11.06°C
+New Zealand,Oceania,2019,11.08°C
+New Zealand,Oceania,2020,10.98°C
+New Zealand,Oceania,2021,11.18°C
+New Zealand,Oceania,2022,11.45°C
+New Zealand,Oceania,2023,11.2°C
+Nigeria,Africa,2000,26.66°C
+Nigeria,Africa,2001,26.73°C
+Nigeria,Africa,2002,26.86°C
+Nigeria,Africa,2003,27.08°C
+Nigeria,Africa,2004,27.15°C
+Nigeria,Africa,2005,27.52°C
+Nigeria,Africa,2006,27.47°C
+Nigeria,Africa,2007,27.02°C
+Nigeria,Africa,2008,26.82°C
+Nigeria,Africa,2009,27.51°C
+Nigeria,Africa,2010,27.75°C
+Nigeria,Africa,2011,27.25°C
+Nigeria,Africa,2012,27.01°C
+Nigeria,Africa,2013,27.27°C
+Nigeria,Africa,2014,27.12°C
+Nigeria,Africa,2015,27.28°C
+Nigeria,Africa,2016,27.41°C
+Nigeria,Africa,2017,27.39°C
+Nigeria,Africa,2018,27.21°C
+Nigeria,Africa,2019,27.25°C
+Nigeria,Africa,2020,27.26°C
+Nigeria,Africa,2021,27.5°C
+Nigeria,Africa,2022,26.97°C
+Nigeria,Africa,2023,27.65°C
+North Korea,Asia,2000,6.65°C
+North Korea,Asia,2001,6.82°C
+North Korea,Asia,2002,7.0°C
+North Korea,Asia,2003,7.23°C
+North Korea,Asia,2004,7.6°C
+North Korea,Asia,2005,6.46°C
+North Korea,Asia,2006,7.39°C
+North Korea,Asia,2007,7.74°C
+North Korea,Asia,2008,7.62°C
+North Korea,Asia,2009,7.16°C
+North Korea,Asia,2010,6.75°C
+North Korea,Asia,2011,6.79°C
+North Korea,Asia,2012,6.45°C
+North Korea,Asia,2013,6.86°C
+North Korea,Asia,2014,7.68°C
+North Korea,Asia,2015,7.82°C
+North Korea,Asia,2016,7.65°C
+North Korea,Asia,2017,7.37°C
+North Korea,Asia,2018,7.29°C
+North Korea,Asia,2019,8.17°C
+North Korea,Asia,2020,7.91°C
+North Korea,Asia,2021,8.03°C
+North Korea,Asia,2022,7.32°C
+North Korea,Asia,2023,8.38°C
+Oman,Asia,2000,27.73°C
+Oman,Asia,2001,27.77°C
+Oman,Asia,2002,27.72°C
+Oman,Asia,2003,27.95°C
+Oman,Asia,2004,27.81°C
+Oman,Asia,2005,27.85°C
+Oman,Asia,2006,27.82°C
+Oman,Asia,2007,28.1°C
+Oman,Asia,2008,27.42°C
+Oman,Asia,2009,28.21°C
+Oman,Asia,2010,28.29°C
+Oman,Asia,2011,27.94°C
+Oman,Asia,2012,28.04°C
+Oman,Asia,2013,27.6°C
+Oman,Asia,2014,27.76°C
+Oman,Asia,2015,28.37°C
+Oman,Asia,2016,28.06°C
+Oman,Asia,2017,28.2°C
+Oman,Asia,2018,28.28°C
+Oman,Asia,2019,28.24°C
+Oman,Asia,2020,27.94°C
+Oman,Asia,2021,28.23°C
+Oman,Asia,2022,28.09°C
+Oman,Asia,2023,28.56°C
+Pakistan,Asia,2000,20.6°C
+Pakistan,Asia,2001,20.77°C
+Pakistan,Asia,2002,21.01°C
+Pakistan,Asia,2003,20.36°C
+Pakistan,Asia,2004,21.13°C
+Pakistan,Asia,2005,19.93°C
+Pakistan,Asia,2006,21.03°C
+Pakistan,Asia,2007,20.59°C
+Pakistan,Asia,2008,20.39°C
+Pakistan,Asia,2009,20.73°C
+Pakistan,Asia,2010,20.98°C
+Pakistan,Asia,2011,20.56°C
+Pakistan,Asia,2012,19.98°C
+Pakistan,Asia,2013,20.47°C
+Pakistan,Asia,2014,20.15°C
+Pakistan,Asia,2015,20.44°C
+Pakistan,Asia,2016,21.32°C
+Pakistan,Asia,2017,21.08°C
+Pakistan,Asia,2018,21.19°C
+Pakistan,Asia,2019,20.38°C
+Pakistan,Asia,2020,20.34°C
+Pakistan,Asia,2021,21.11°C
+Pakistan,Asia,2022,21.19°C
+Pakistan,Asia,2023,20.84°C
+Palestine,Asia,2000,19.94°C
+Palestine,Asia,2001,20.57°C
+Palestine,Asia,2002,20.46°C
+Palestine,Asia,2003,20.23°C
+Palestine,Asia,2004,20.12°C
+Palestine,Asia,2005,19.89°C
+Palestine,Asia,2006,19.77°C
+Palestine,Asia,2007,20.22°C
+Palestine,Asia,2008,20.5°C
+Palestine,Asia,2009,20.64°C
+Palestine,Asia,2010,22.0°C
+Palestine,Asia,2011,20.04°C
+Palestine,Asia,2012,20.68°C
+Palestine,Asia,2013,20.48°C
+Palestine,Asia,2014,20.55°C
+Palestine,Asia,2015,20.52°C
+Palestine,Asia,2016,21.0°C
+Palestine,Asia,2017,20.69°C
+Palestine,Asia,2018,21.51°C
+Palestine,Asia,2019,20.74°C
+Palestine,Asia,2020,21.05°C
+Palestine,Asia,2021,21.36°C
+Palestine,Asia,2022,20.68°C
+Palestine,Asia,2023,21.43°C
+Philippines,Asia,2000,25.57°C
+Philippines,Asia,2001,25.77°C
+Philippines,Asia,2002,25.88°C
+Philippines,Asia,2003,25.79°C
+Philippines,Asia,2004,25.85°C
+Philippines,Asia,2005,25.96°C
+Philippines,Asia,2006,26.08°C
+Philippines,Asia,2007,26.07°C
+Philippines,Asia,2008,25.81°C
+Philippines,Asia,2009,25.94°C
+Philippines,Asia,2010,26.29°C
+Philippines,Asia,2011,25.79°C
+Philippines,Asia,2012,26.02°C
+Philippines,Asia,2013,26.11°C
+Philippines,Asia,2014,25.94°C
+Philippines,Asia,2015,26.15°C
+Philippines,Asia,2016,26.52°C
+Philippines,Asia,2017,26.13°C
+Philippines,Asia,2018,26.25°C
+Philippines,Asia,2019,26.37°C
+Philippines,Asia,2020,26.45°C
+Philippines,Asia,2021,26.25°C
+Philippines,Asia,2022,26.22°C
+Philippines,Asia,2023,26.44°C
+Portugal,Europe,2000,15.14°C
+Portugal,Europe,2001,15.21°C
+Portugal,Europe,2002,15.24°C
+Portugal,Europe,2003,15.55°C
+Portugal,Europe,2004,15.24°C
+Portugal,Europe,2005,15.26°C
+Portugal,Europe,2006,15.7°C
+Portugal,Europe,2007,14.92°C
+Portugal,Europe,2008,14.83°C
+Portugal,Europe,2009,15.63°C
+Portugal,Europe,2010,15.34°C
+Portugal,Europe,2011,15.76°C
+Portugal,Europe,2012,14.96°C
+Portugal,Europe,2013,15.15°C
+Portugal,Europe,2014,15.36°C
+Portugal,Europe,2015,15.7°C
+Portugal,Europe,2016,15.59°C
+Portugal,Europe,2017,16.1°C
+Portugal,Europe,2018,15.16°C
+Portugal,Europe,2019,15.46°C
+Portugal,Europe,2020,15.98°C
+Portugal,Europe,2021,15.46°C
+Portugal,Europe,2022,16.39°C
+Portugal,Europe,2023,16.3°C
+Qatar,Asia,2000,27.41°C
+Qatar,Asia,2001,27.57°C
+Qatar,Asia,2002,27.57°C
+Qatar,Asia,2003,27.62°C
+Qatar,Asia,2004,27.56°C
+Qatar,Asia,2005,27.28°C
+Qatar,Asia,2006,27.78°C
+Qatar,Asia,2007,27.88°C
+Qatar,Asia,2008,27.65°C
+Qatar,Asia,2009,27.81°C
+Qatar,Asia,2010,28.3°C
+Qatar,Asia,2011,27.56°C
+Qatar,Asia,2012,27.7°C
+Qatar,Asia,2013,26.97°C
+Qatar,Asia,2014,27.4°C
+Qatar,Asia,2015,28.2°C
+Qatar,Asia,2016,27.61°C
+Qatar,Asia,2017,28.07°C
+Qatar,Asia,2018,28.44°C
+Qatar,Asia,2019,28.16°C
+Qatar,Asia,2020,28.09°C
+Qatar,Asia,2021,28.53°C
+Qatar,Asia,2022,28.35°C
+Qatar,Asia,2023,28.47°C
+Russia,Europe,2000,-4.19°C
+Russia,Europe,2001,-4.11°C
+Russia,Europe,2002,-3.72°C
+Russia,Europe,2003,-3.39°C
+Russia,Europe,2004,-4.0°C
+Russia,Europe,2005,-3.01°C
+Russia,Europe,2006,-4.23°C
+Russia,Europe,2007,-2.48°C
+Russia,Europe,2008,-2.82°C
+Russia,Europe,2009,-4.16°C
+Russia,Europe,2010,-4.09°C
+Russia,Europe,2011,-2.94°C
+Russia,Europe,2012,-3.43°C
+Russia,Europe,2013,-3.28°C
+Russia,Europe,2014,-3.46°C
+Russia,Europe,2015,-2.64°C
+Russia,Europe,2016,-2.81°C
+Russia,Europe,2017,-2.62°C
+Russia,Europe,2018,-3.18°C
+Russia,Europe,2019,-2.57°C
+Russia,Europe,2020,-1.28°C
+Russia,Europe,2021,-3.46°C
+Russia,Europe,2022,-2.54°C
+Russia,Europe,2023,-2.59°C
+Saudi Arabia,Asia,2000,25.82°C
+Saudi Arabia,Asia,2001,26.0°C
+Saudi Arabia,Asia,2002,25.86°C
+Saudi Arabia,Asia,2003,26.15°C
+Saudi Arabia,Asia,2004,25.91°C
+Saudi Arabia,Asia,2005,25.94°C
+Saudi Arabia,Asia,2006,26.02°C
+Saudi Arabia,Asia,2007,26.09°C
+Saudi Arabia,Asia,2008,25.79°C
+Saudi Arabia,Asia,2009,26.26°C
+Saudi Arabia,Asia,2010,27.03°C
+Saudi Arabia,Asia,2011,25.87°C
+Saudi Arabia,Asia,2012,26.28°C
+Saudi Arabia,Asia,2013,25.86°C
+Saudi Arabia,Asia,2014,26.3°C
+Saudi Arabia,Asia,2015,26.77°C
+Saudi Arabia,Asia,2016,26.56°C
+Saudi Arabia,Asia,2017,26.86°C
+Saudi Arabia,Asia,2018,26.89°C
+Saudi Arabia,Asia,2019,26.74°C
+Saudi Arabia,Asia,2020,26.55°C
+Saudi Arabia,Asia,2021,27.17°C
+Saudi Arabia,Asia,2022,26.83°C
+Saudi Arabia,Asia,2023,26.97°C
+South Africa,Africa,2000,17.24°C
+South Africa,Africa,2001,17.6°C
+South Africa,Africa,2002,17.78°C
+South Africa,Africa,2003,18.11°C
+South Africa,Africa,2004,18.04°C
+South Africa,Africa,2005,18.12°C
+South Africa,Africa,2006,17.44°C
+South Africa,Africa,2007,17.85°C
+South Africa,Africa,2008,17.88°C
+South Africa,Africa,2009,17.76°C
+South Africa,Africa,2010,18.23°C
+South Africa,Africa,2011,17.32°C
+South Africa,Africa,2012,17.71°C
+South Africa,Africa,2013,17.86°C
+South Africa,Africa,2014,17.95°C
+South Africa,Africa,2015,18.84°C
+South Africa,Africa,2016,18.83°C
+South Africa,Africa,2017,18.28°C
+South Africa,Africa,2018,18.37°C
+South Africa,Africa,2019,19.13°C
+South Africa,Africa,2020,18.18°C
+South Africa,Africa,2021,17.85°C
+South Africa,Africa,2022,18.12°C
+South Africa,Africa,2023,18.24°C
+South Korea,Asia,2000,12.11°C
+South Korea,Asia,2001,12.34°C
+South Korea,Asia,2002,12.25°C
+South Korea,Asia,2003,12.14°C
+South Korea,Asia,2004,12.94°C
+South Korea,Asia,2005,11.92°C
+South Korea,Asia,2006,12.55°C
+South Korea,Asia,2007,12.85°C
+South Korea,Asia,2008,12.6°C
+South Korea,Asia,2009,12.59°C
+South Korea,Asia,2010,12.2°C
+South Korea,Asia,2011,11.93°C
+South Korea,Asia,2012,11.86°C
+South Korea,Asia,2013,12.43°C
+South Korea,Asia,2014,12.71°C
+South Korea,Asia,2015,13.05°C
+South Korea,Asia,2016,13.25°C
+South Korea,Asia,2017,12.67°C
+South Korea,Asia,2018,12.58°C
+South Korea,Asia,2019,13.1°C
+South Korea,Asia,2020,12.85°C
+South Korea,Asia,2021,13.19°C
+South Korea,Asia,2022,12.8°C
+South Korea,Asia,2023,13.5°C
+Sri Lanka,Asia,2000,26.12°C
+Sri Lanka,Asia,2001,26.48°C
+Sri Lanka,Asia,2002,26.55°C
+Sri Lanka,Asia,2003,26.59°C
+Sri Lanka,Asia,2004,26.56°C
+Sri Lanka,Asia,2005,26.79°C
+Sri Lanka,Asia,2006,26.55°C
+Sri Lanka,Asia,2007,26.47°C
+Sri Lanka,Asia,2008,26.39°C
+Sri Lanka,Asia,2009,26.75°C
+Sri Lanka,Asia,2010,26.7°C
+Sri Lanka,Asia,2011,26.48°C
+Sri Lanka,Asia,2012,26.71°C
+Sri Lanka,Asia,2013,26.55°C
+Sri Lanka,Asia,2014,26.6°C
+Sri Lanka,Asia,2015,26.66°C
+Sri Lanka,Asia,2016,27.21°C
+Sri Lanka,Asia,2017,26.74°C
+Sri Lanka,Asia,2018,26.36°C
+Sri Lanka,Asia,2019,26.9°C
+Sri Lanka,Asia,2020,26.99°C
+Sri Lanka,Asia,2021,26.6°C
+Sri Lanka,Asia,2022,26.44°C
+Sri Lanka,Asia,2023,26.88°C
+Switzerland,Europe,2000,5.7°C
+Switzerland,Europe,2001,5.27°C
+Switzerland,Europe,2002,5.81°C
+Switzerland,Europe,2003,5.75°C
+Switzerland,Europe,2004,5.11°C
+Switzerland,Europe,2005,4.89°C
+Switzerland,Europe,2006,5.76°C
+Switzerland,Europe,2007,5.92°C
+Switzerland,Europe,2008,5.62°C
+Switzerland,Europe,2009,5.72°C
+Switzerland,Europe,2010,4.63°C
+Switzerland,Europe,2011,6.39°C
+Switzerland,Europe,2012,5.59°C
+Switzerland,Europe,2013,5.11°C
+Switzerland,Europe,2014,6.32°C
+Switzerland,Europe,2015,6.48°C
+Switzerland,Europe,2016,5.99°C
+Switzerland,Europe,2017,5.97°C
+Switzerland,Europe,2018,6.86°C
+Switzerland,Europe,2019,6.34°C
+Switzerland,Europe,2020,6.68°C
+Switzerland,Europe,2021,5.45°C
+Switzerland,Europe,2022,7.11°C
+Switzerland,Europe,2023,7.1°C
+Thailand,Asia,2000,25.91°C
+Thailand,Asia,2001,26.26°C
+Thailand,Asia,2002,26.46°C
+Thailand,Asia,2003,26.34°C
+Thailand,Asia,2004,26.27°C
+Thailand,Asia,2005,26.6°C
+Thailand,Asia,2006,26.46°C
+Thailand,Asia,2007,26.36°C
+Thailand,Asia,2008,25.87°C
+Thailand,Asia,2009,26.24°C
+Thailand,Asia,2010,26.93°C
+Thailand,Asia,2011,25.74°C
+Thailand,Asia,2012,26.65°C
+Thailand,Asia,2013,26.36°C
+Thailand,Asia,2014,26.4°C
+Thailand,Asia,2015,26.8°C
+Thailand,Asia,2016,26.95°C
+Thailand,Asia,2017,26.5°C
+Thailand,Asia,2018,26.45°C
+Thailand,Asia,2019,27.1°C
+Thailand,Asia,2020,27.0°C
+Thailand,Asia,2021,26.46°C
+Thailand,Asia,2022,26.37°C
+Thailand,Asia,2023,27.04°C
+Turkey,Asia,2000,11.16°C
+Turkey,Asia,2001,12.42°C
+Turkey,Asia,2002,11.3°C
+Turkey,Asia,2003,11.28°C
+Turkey,Asia,2004,11.23°C
+Turkey,Asia,2005,11.41°C
+Turkey,Asia,2006,11.48°C
+Turkey,Asia,2007,11.72°C
+Turkey,Asia,2008,11.62°C
+Turkey,Asia,2009,11.68°C
+Turkey,Asia,2010,13.33°C
+Turkey,Asia,2011,10.74°C
+Turkey,Asia,2012,11.75°C
+Turkey,Asia,2013,11.7°C
+Turkey,Asia,2014,12.61°C
+Turkey,Asia,2015,12.06°C
+Turkey,Asia,2016,12.24°C
+Turkey,Asia,2017,11.96°C
+Turkey,Asia,2018,13.33°C
+Turkey,Asia,2019,12.6°C
+Turkey,Asia,2020,12.79°C
+Turkey,Asia,2021,12.62°C
+Turkey,Asia,2022,12.21°C
+Turkey,Asia,2023,12.88°C
+Uganda,Africa,2000,22.87°C
+Uganda,Africa,2001,22.6°C
+Uganda,Africa,2002,23.14°C
+Uganda,Africa,2003,23.19°C
+Uganda,Africa,2004,23.24°C
+Uganda,Africa,2005,23.51°C
+Uganda,Africa,2006,23.02°C
+Uganda,Africa,2007,22.98°C
+Uganda,Africa,2008,22.85°C
+Uganda,Africa,2009,23.48°C
+Uganda,Africa,2010,23.17°C
+Uganda,Africa,2011,22.96°C
+Uganda,Africa,2012,23.05°C
+Uganda,Africa,2013,23.03°C
+Uganda,Africa,2014,23.38°C
+Uganda,Africa,2015,23.62°C
+Uganda,Africa,2016,24.08°C
+Uganda,Africa,2017,23.75°C
+Uganda,Africa,2018,23.28°C
+Uganda,Africa,2019,23.51°C
+Uganda,Africa,2020,23.17°C
+Uganda,Africa,2021,23.61°C
+Uganda,Africa,2022,23.55°C
+Uganda,Africa,2023,23.97°C
+Ukraine,Europe,2000,9.4°C
+Ukraine,Europe,2001,8.97°C
+Ukraine,Europe,2002,9.44°C
+Ukraine,Europe,2003,8.2°C
+Ukraine,Europe,2004,8.87°C
+Ukraine,Europe,2005,9.02°C
+Ukraine,Europe,2006,8.57°C
+Ukraine,Europe,2007,10.19°C
+Ukraine,Europe,2008,9.68°C
+Ukraine,Europe,2009,9.59°C
+Ukraine,Europe,2010,9.64°C
+Ukraine,Europe,2011,8.93°C
+Ukraine,Europe,2012,9.45°C
+Ukraine,Europe,2013,9.77°C
+Ukraine,Europe,2014,9.57°C
+Ukraine,Europe,2015,10.24°C
+Ukraine,Europe,2016,9.66°C
+Ukraine,Europe,2017,9.88°C
+Ukraine,Europe,2018,9.85°C
+Ukraine,Europe,2019,10.66°C
+Ukraine,Europe,2020,10.76°C
+Ukraine,Europe,2021,9.19°C
+Ukraine,Europe,2022,9.91°C
+Ukraine,Europe,2023,10.81°C
+United Arab Emirates,Asia,2000,27.87°C
+United Arab Emirates,Asia,2001,27.9°C
+United Arab Emirates,Asia,2002,27.96°C
+United Arab Emirates,Asia,2003,28.22°C
+United Arab Emirates,Asia,2004,28.14°C
+United Arab Emirates,Asia,2005,28.14°C
+United Arab Emirates,Asia,2006,28.26°C
+United Arab Emirates,Asia,2007,28.3°C
+United Arab Emirates,Asia,2008,27.88°C
+United Arab Emirates,Asia,2009,28.3°C
+United Arab Emirates,Asia,2010,28.93°C
+United Arab Emirates,Asia,2011,28.43°C
+United Arab Emirates,Asia,2012,28.61°C
+United Arab Emirates,Asia,2013,27.78°C
+United Arab Emirates,Asia,2014,28.0°C
+United Arab Emirates,Asia,2015,28.92°C
+United Arab Emirates,Asia,2016,28.22°C
+United Arab Emirates,Asia,2017,28.94°C
+United Arab Emirates,Asia,2018,28.96°C
+United Arab Emirates,Asia,2019,28.7°C
+United Arab Emirates,Asia,2020,28.58°C
+United Arab Emirates,Asia,2021,29.09°C
+United Arab Emirates,Asia,2022,28.87°C
+United Arab Emirates,Asia,2023,28.97°C
+United Kingdom,Europe,2000,9.42°C
+United Kingdom,Europe,2001,9.11°C
+United Kingdom,Europe,2002,9.73°C
+United Kingdom,Europe,2003,9.74°C
+United Kingdom,Europe,2004,9.7°C
+United Kingdom,Europe,2005,9.66°C
+United Kingdom,Europe,2006,9.94°C
+United Kingdom,Europe,2007,9.81°C
+United Kingdom,Europe,2008,9.27°C
+United Kingdom,Europe,2009,9.39°C
+United Kingdom,Europe,2010,8.23°C
+United Kingdom,Europe,2011,9.88°C
+United Kingdom,Europe,2012,8.95°C
+United Kingdom,Europe,2013,8.98°C
+United Kingdom,Europe,2014,10.13°C
+United Kingdom,Europe,2015,9.44°C
+United Kingdom,Europe,2016,9.55°C
+United Kingdom,Europe,2017,9.84°C
+United Kingdom,Europe,2018,9.71°C
+United Kingdom,Europe,2019,9.69°C
+United Kingdom,Europe,2020,9.9°C
+United Kingdom,Europe,2021,9.57°C
+United Kingdom,Europe,2022,10.33°C
+United Kingdom,Europe,2023,10.25°C
+United States,North America,2000,9.44°C
+United States,North America,2001,9.54°C
+United States,North America,2002,9.62°C
+United States,North America,2003,9.54°C
+United States,North America,2004,9.54°C
+United States,North America,2005,9.85°C
+United States,North America,2006,9.97°C
+United States,North America,2007,9.86°C
+United States,North America,2008,8.99°C
+United States,North America,2009,9.11°C
+United States,North America,2010,9.51°C
+United States,North America,2011,9.55°C
+United States,North America,2012,10.39°C
+United States,North America,2013,9.2°C
+United States,North America,2014,9.45°C
+United States,North America,2015,10.34°C
+United States,North America,2016,10.82°C
+United States,North America,2017,10.46°C
+United States,North America,2018,10.08°C
+United States,North America,2019,9.85°C
+United States,North America,2020,10.27°C
+United States,North America,2021,10.22°C
+United States,North America,2022,9.87°C
+United States,North America,2023,10.35°C
+Uzbekistan,Asia,2000,13.64°C
+Uzbekistan,Asia,2001,13.77°C
+Uzbekistan,Asia,2002,13.61°C
+Uzbekistan,Asia,2003,12.84°C
+Uzbekistan,Asia,2004,14.28°C
+Uzbekistan,Asia,2005,13.94°C
+Uzbekistan,Asia,2006,13.62°C
+Uzbekistan,Asia,2007,13.88°C
+Uzbekistan,Asia,2008,13.2°C
+Uzbekistan,Asia,2009,13.58°C
+Uzbekistan,Asia,2010,14.19°C
+Uzbekistan,Asia,2011,13.03°C
+Uzbekistan,Asia,2012,13.14°C
+Uzbekistan,Asia,2013,14.37°C
+Uzbekistan,Asia,2014,12.62°C
+Uzbekistan,Asia,2015,14.07°C
+Uzbekistan,Asia,2016,14.53°C
+Uzbekistan,Asia,2017,13.71°C
+Uzbekistan,Asia,2018,13.45°C
+Uzbekistan,Asia,2019,14.45°C
+Uzbekistan,Asia,2020,13.47°C
+Uzbekistan,Asia,2021,14.48°C
+Uzbekistan,Asia,2022,14.4°C
+Uzbekistan,Asia,2023,15.27°C
+Venezuela,South America,2000,24.8°C
+Venezuela,South America,2001,25.11°C
+Venezuela,South America,2002,25.29°C
+Venezuela,South America,2003,25.45°C
+Venezuela,South America,2004,25.37°C
+Venezuela,South America,2005,25.72°C
+Venezuela,South America,2006,25.56°C
+Venezuela,South America,2007,25.64°C
+Venezuela,South America,2008,25.36°C
+Venezuela,South America,2009,25.87°C
+Venezuela,South America,2010,25.97°C
+Venezuela,South America,2011,25.46°C
+Venezuela,South America,2012,25.49°C
+Venezuela,South America,2013,25.83°C
+Venezuela,South America,2014,25.91°C
+Venezuela,South America,2015,26.27°C
+Venezuela,South America,2016,26.16°C
+Venezuela,South America,2017,25.55°C
+Venezuela,South America,2018,25.58°C
+Venezuela,South America,2019,25.81°C
+Venezuela,South America,2020,25.98°C
+Venezuela,South America,2021,25.23°C
+Venezuela,South America,2022,25.28°C
+Venezuela,South America,2023,26.16°C
+Vietnam,Asia,2000,23.55°C
+Vietnam,Asia,2001,23.77°C
+Vietnam,Asia,2002,24.06°C
+Vietnam,Asia,2003,24.09°C
+Vietnam,Asia,2004,23.66°C
+Vietnam,Asia,2005,23.77°C
+Vietnam,Asia,2006,23.98°C
+Vietnam,Asia,2007,23.81°C
+Vietnam,Asia,2008,23.27°C
+Vietnam,Asia,2009,23.91°C
+Vietnam,Asia,2010,24.37°C
+Vietnam,Asia,2011,23.15°C
+Vietnam,Asia,2012,24.05°C
+Vietnam,Asia,2013,23.92°C
+Vietnam,Asia,2014,23.99°C
+Vietnam,Asia,2015,24.55°C
+Vietnam,Asia,2016,24.52°C
+Vietnam,Asia,2017,24.2°C
+Vietnam,Asia,2018,24.24°C
+Vietnam,Asia,2019,24.82°C
+Vietnam,Asia,2020,24.41°C
+Vietnam,Asia,2021,24.12°C
+Vietnam,Asia,2022,23.97°C
+Vietnam,Asia,2023,24.51°C
+Yemen,Asia,2000,25.63°C
+Yemen,Asia,2001,25.55°C
+Yemen,Asia,2002,25.55°C
+Yemen,Asia,2003,25.72°C
+Yemen,Asia,2004,25.74°C
+Yemen,Asia,2005,25.99°C
+Yemen,Asia,2006,26.02°C
+Yemen,Asia,2007,26.03°C
+Yemen,Asia,2008,25.42°C
+Yemen,Asia,2009,26.17°C
+Yemen,Asia,2010,26.02°C
+Yemen,Asia,2011,25.91°C
+Yemen,Asia,2012,26.02°C
+Yemen,Asia,2013,25.8°C
+Yemen,Asia,2014,25.95°C
+Yemen,Asia,2015,26.09°C
+Yemen,Asia,2016,26.08°C
+Yemen,Asia,2017,25.99°C
+Yemen,Asia,2018,25.72°C
+Yemen,Asia,2019,26.27°C
+Yemen,Asia,2020,25.86°C
+Yemen,Asia,2021,25.82°C
+Yemen,Asia,2022,25.87°C
+Yemen,Asia,2023,26.6°C
