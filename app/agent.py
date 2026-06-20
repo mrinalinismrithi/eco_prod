@@ -597,13 +597,10 @@ def validate_openai_key():
         raise OpenAIConfigError("OPENAI_API_KEY looks invalid")
 
 def validate_gemini_key():
-        api_key = os.getenv("GEMINI_API_KEY")
-        if not api_key:
-            raise GeminiConfigError("GEMINI_API_KEY is missing in .env file")
-        return True 
-
-    return True
-
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        raise GeminiConfigError("GEMINI_API_KEY is missing in .env file")
+    return True 
 
 def get_llm():
     validate_gemini_key()
