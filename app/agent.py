@@ -13,6 +13,7 @@ except ImportError:
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI 
 from app.logging_config import logger
 from app.data_loader import load_all_datasets
 from app.chains import build_reasoning_chain
@@ -584,6 +585,9 @@ MAX_LAST_EVIDENCE_CHARS = 4_000
 class OpenAIConfigError(Exception):
     pass
 
+class GeminiConfigError(Exception):
+    pass 
+
 
 def validate_openai_key():
     api_key = os.getenv("OPENAI_API_KEY")
@@ -591,18 +595,25 @@ def validate_openai_key():
         raise OpenAIConfigError("OPENAI_API_KEY is missing in .env file")
     if not api_key.startswith("sk-"):
         raise OpenAIConfigError("OPENAI_API_KEY looks invalid")
+
+def validate_gemini_key():
+        api_key = os.getenv("GEMINI_API_KEY")
+        if not api_key:
+            raise GeminiConfigError("GEMINI_API_KEY is missing in .env file")
+        return True 
+
     return True
 
 
 def get_llm():
-    validate_openai_key()
-    return ChatOpenAI(
-        model="gpt-4o-mini",
+    validate_gemini_key()
+    return ChatGoogleGenerativeAI(
+        model="gemini-2.5-flash",
         temperature=0.1,
-        api_key=os.getenv("OPENAI_API_KEY"),
+        google_api_key=os.getenv("GEMINI_API_KEY"),
         timeout=60,
         max_retries=2,
-    )
+    ) 
 
 
 def clean_history(history):
@@ -776,7 +787,7 @@ def _llm_answer(system_prompt: str, question: str = "", history: list = None) ->
 
         return content.strip()
 
-    except OpenAIConfigError as e:
+     except (OpenAIConfigError, GeminiConfigError) as e: 
         logger.error("LLM configuration error: %s", e)
         return "AI temporarily unavailable. Configuration error â€” please check the API key."
 
