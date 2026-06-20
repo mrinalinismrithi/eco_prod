@@ -784,12 +784,12 @@ def _llm_answer(system_prompt: str, question: str = "", history: list = None) ->
 
         return content.strip()
 
-     except (OpenAIConfigError, GeminiConfigError) as e: 
+        except (OpenAIConfigError, GeminiConfigError) as e:
         logger.error("LLM configuration error: %s", e)
-        return "AI temporarily unavailable. Configuration error â€” please check the API key."
+        return "AI temporarily unavailable. Configuration error — please check the API key."
 
     except Exception as e:
-        err_str = str(type(e).__name__)
+        err_str = str(type(e).__name__) 
 
         if openai is not None:
             if isinstance(e, openai.RateLimitError):
