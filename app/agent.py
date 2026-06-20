@@ -13,13 +13,13 @@ except ImportError:
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
-from langchain_google_genai import ChatGoogleGenerativeAI 
+from langchain_google_genai import ChatGoogleGenerativeAI
 from app.logging_config import logger
 from app.data_loader import load_all_datasets
 from app.chains import build_reasoning_chain
-from app.intent import Intent, detect_intent 
-from app.utils import get_top_countries 
-from app.dataset_state import get_processed_path, get_active_source 
+from app.intent import Intent, detect_intent
+from app.utils import get_top_countries
+from app.dataset_state import get_processed_path, get_active_source
 
 from app.data_loader import (
     DataFileError,
@@ -38,14 +38,14 @@ from app.weather import (
 load_dotenv()
 
 # =========================
-# RESPONSE FORMATTER â€” inlined (output only, no logic change)
+# RESPONSE FORMATTER — inlined (output only, no logic change)
 # =========================
 # All formatter code lives here so this is a single self-contained file.
 
 import re
 
 
-# â”€â”€ colour tokens â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ── colour tokens ─────────────────────────────────────────────────────────
 
 _CSS = """<style>
 .el{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
@@ -139,7 +139,7 @@ _CSS = """<style>
 </style>"""
 
 
-# â”€â”€ helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ── helpers ─────────────────────────────────────────────────────────────
 
 def _x(t):
     return str(t).replace("&","&amp;").replace("<","&lt;").replace(">","&gt;")
@@ -165,7 +165,7 @@ _DOT_COLOR = {
 }
 
 
-# â”€â”€ markdown â†’ HTML â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ── markdown → HTML ────────────────────────────────────────────────────
 
 def _md_inline(text):
     """Convert **bold**, *italic* to HTML inside a string."""
@@ -235,7 +235,7 @@ def _append_unit(value, unit):
     return f"{value}{unit}"
 
 
-# â”€â”€ table renderer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ── table renderer ──────────────────────────────────────────────────────
 
 def _render_table(rows, is_ranked=False):
     """
@@ -295,7 +295,7 @@ def _render_table(rows, is_ranked=False):
     )
 
 
-# â”€â”€ main block parser â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ── main block parser ───────────────────────────────────────────────────
 
 def _parse_blocks(text):
     """
@@ -505,7 +505,7 @@ def _weather_card(text):
 
     return card, cleaned
 
-# â”€â”€ public API â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# ── public API ───────────────────────────────────────────────────────────
 
 def format_response(response_text: str, source: str = "") -> str:
     """
@@ -523,31 +523,31 @@ def format_response(response_text: str, source: str = "") -> str:
     if not response_text or not response_text.strip():
         return f"{_CSS}<div class='el'><p class='el-p'>No response available.</p></div>"
 
-    # Strip trailing "Source: ..." line â€” we add a styled footer
+    # Strip trailing "Source: ..." line — we add a styled footer
     resolved_source = source
     src_m = re.search(r"\n*Source:\s*(.+)$", response_text, re.I)
     if src_m:
         resolved_source = src_m.group(1).strip()
     text = re.sub(r"\n*Source:\s*.+$", "", response_text, flags=re.I).strip()
 
-    # â”€â”€ weather card (full-bleed, rendered first) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── weather card (full-bleed, rendered first) ──────────────────────
     wx_card, text = _weather_card(text)
 
-    # â”€â”€ strip the "Using live weather data," opener â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── strip the "Using live weather data," opener ─────────────────────
     text = re.sub(r"^Using live weather data,?\s*\n?", "", text, flags=re.I).strip()
 
-    # â”€â”€ parse remaining markdown into HTML blocks â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── parse remaining markdown into HTML blocks ───────────────────────
     body = _parse_blocks(text)
 
-    # â”€â”€ merge consecutive single stat-cards into grids â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── merge consecutive single stat-cards into grids ──────────────────
     body = _merge_stat_grids(body)
 
-    # â”€â”€ source footer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── source footer ────────────────────────────────────────────────────
     footer = (
         f'<div class="el-src">'
         f'<span>Source: {_x(resolved_source)}</span>'
         f'</div>'
-    ) 
+    )
     inner = wx_card + body + footer
     return f"{_CSS}<div class='el'>{inner}</div>"
 
@@ -567,13 +567,13 @@ CLIMATE_UNAVAILABLE = "Climate dataset temporarily unavailable."
 WEATHER_UNAVAILABLE = "Live weather service unavailable."
 
 # Single source of truth for history window
-HISTORY_WINDOW = 10  # FIX-6: increased from 6 â€” no practical chat limit issue
+HISTORY_WINDOW = 10  # FIX-6: increased from 6 — no practical chat limit issue
 
 # Context size caps to prevent token overflow
 MAX_FACTS_CHARS = 14_000   # slightly larger for ranking/compare tables
 MAX_EVIDENCE_CHARS = 3_000
 MAX_SUPPLEMENT_CHARS = 5_000
-MAX_PRIOR_CONTEXT_CHARS = 800   # FIX-1: tightened â€” only for genuine follow-ups
+MAX_PRIOR_CONTEXT_CHARS = 800   # FIX-1: tightened — only for genuine follow-ups
 MAX_LAST_ANSWER_CHARS = 1_500   # FIX-1: tightened
 MAX_LAST_EVIDENCE_CHARS = 4_000
 
@@ -586,7 +586,7 @@ class OpenAIConfigError(Exception):
     pass
 
 class GeminiConfigError(Exception):
-    pass 
+    pass
 
 
 def validate_openai_key():
@@ -600,7 +600,7 @@ def validate_gemini_key():
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
         raise GeminiConfigError("GEMINI_API_KEY is missing in .env file")
-    return True 
+    return True
 
 def get_llm():
     validate_gemini_key()
@@ -610,7 +610,7 @@ def get_llm():
         google_api_key=os.getenv("GEMINI_API_KEY"),
         timeout=60,
         max_retries=2,
-    ) 
+    )
 
 
 def clean_history(history):
@@ -753,7 +753,7 @@ def _classify_question_type(question: str) -> str:
 def _llm_answer(system_prompt: str, question: str = "", history: list = None) -> str:
     """
     Invoke the LLM with typed exception handling.
-    FIX-6: history is now injected correctly â€” role determines message class,
+    FIX-6: history is now injected correctly — role determines message class,
             content comes from the history record, not the current question.
     """
     try:
@@ -784,33 +784,33 @@ def _llm_answer(system_prompt: str, question: str = "", history: list = None) ->
 
         return content.strip()
 
-        except (OpenAIConfigError, GeminiConfigError) as e:
+    except (OpenAIConfigError, GeminiConfigError) as e:
         logger.error("LLM configuration error: %s", e)
         return "AI temporarily unavailable. Configuration error — please check the API key."
 
     except Exception as e:
-        err_str = str(type(e).__name__) 
+        err_str = str(type(e).__name__)
 
         if openai is not None:
             if isinstance(e, openai.RateLimitError):
                 logger.warning("LLM rate limited: %s", e)
-                return "AI temporarily unavailable. Rate limit reached â€” please wait a moment and try again."
+                return "AI temporarily unavailable. Rate limit reached — please wait a moment and try again."
             if isinstance(e, openai.AuthenticationError):
-                logger.error("LLM authentication failed â€” check OPENAI_API_KEY: %s", e)
-                return "AI temporarily unavailable. Authentication error â€” please check your API key configuration."
+                logger.error("LLM authentication failed — check OPENAI_API_KEY: %s", e)
+                return "AI temporarily unavailable. Authentication error — please check your API key configuration."
             if isinstance(e, openai.APITimeoutError):
                 logger.warning("LLM request timed out: %s", e)
-                return "AI temporarily unavailable. The request timed out â€” please try again in a few seconds."
+                return "AI temporarily unavailable. The request timed out — please try again in a few seconds."
             if isinstance(e, openai.BadRequestError):
                 logger.error("LLM bad request (possibly context overflow): %s", e)
-                return "AI temporarily unavailable. The request was too large â€” please ask a more specific question."
+                return "AI temporarily unavailable. The request was too large — please ask a more specific question."
 
         logger.exception("LLM failed with unexpected error (%s): %s", err_str, e)
         return "AI temporarily unavailable. Climate data is loaded, so please try again in a few seconds."
 
 
 # =========================
-# ROUTER  (legacy â€” kept for compatibility)
+# ROUTER  (legacy — kept for compatibility)
 # =========================
 
 def route_query(question: str):
@@ -880,7 +880,7 @@ def ask_ecolens(question, history=None, data=None, analysis_state=None, default_
 
     if not isinstance(analysis_state, dict):
         logger.warning(
-            "analysis_state was not a dict (type=%s) â€” resetting to empty.",
+            "analysis_state was not a dict (type=%s) — resetting to empty.",
             type(analysis_state).__name__,
         )
         analysis_state = {}
@@ -890,8 +890,8 @@ def ask_ecolens(question, history=None, data=None, analysis_state=None, default_
     try:
         if not data:
             from app.data_loader import clear_dataset_cache
-        clear_dataset_cache()
-        data = load_all_datasets(force_reload=True, retries=3, retry_delay=1)
+            clear_dataset_cache()
+            data = load_all_datasets(force_reload=True, retries=3, retry_delay=1)
     except Exception as exc:
         logger.warning("Climate datasets not ready for AI: %s", exc)
         return {
@@ -1029,15 +1029,15 @@ def _is_followup_question(question: str) -> bool:
     """
     q = str(question).lower()
 
-    # If question contains a year, location, or country name â†’ fresh question
+    # If question contains a year, location, or country name → fresh question
     if any(word in q for word in ["this year", "latest year", "last year", "current year"]):
         return False
     if extract_location(question) or re.search(r"\b(19\d{2}|20\d{2})\b", q):
-        return False 
+        return False
     if re.search(r"\b(last|past|previous)\s+\d+\s+years?\b", q):
         return True
 
-    # If question contains clear ranking/meta/comparison keywords â†’ fresh question
+    # If question contains clear ranking/meta/comparison keywords → fresh question
     fresh_signals = [
         "top ", "how many", "list all", "all countries", "all regions",
         "compare", "vs ", "versus", "rank", "ranking", "hottest", "coldest",
@@ -1074,14 +1074,14 @@ def _select_answer_mode(question: str, history=None, analysis_state=None, data=N
     temperature_keywords = ["temperature", "temp", "hot", "cold"]
 
     hybrid_keywords = [
-         "weather and climate", 
+         "weather and climate",
         "live and csv", "weather with csv",
     ]
 
     dataset_time_words = [
         "this year", "latest year", "latest", "last year", "past",
         "yearly", "over years", "historical", "history",
-    ] 
+    ]
     if re.search(r"\b(last|past|previous)\s+\d+\s+years?\b", q):
         return "climate"
 
@@ -1351,13 +1351,13 @@ def _df_preview(df, max_rows=20):
 
 
 # =========================
-# FIX-4: RANKING BUILDER â€” dedicated function to build top-N tables
+# FIX-4: RANKING BUILDER — dedicated function to build top-N tables
 # =========================
 
 def _build_ranking_block(country_df, region_df, top_n: int, question: str) -> str:
     """
     Build a clean, complete ranking block for rank-type questions.
-    Always returns ALL top_n rows â€” never truncated.
+    Always returns ALL top_n rows — never truncated.
     FIX-4: this is called explicitly for rank questions so the LLM gets
             a tight, focused context rather than a large noisy block.
     """
@@ -1396,7 +1396,7 @@ def _build_ranking_block(country_df, region_df, top_n: int, question: str) -> st
 
         # Also include opposite direction for context
         if not wants_asc and not wants_desc:
-            # neutral â€” show both
+            # neutral — show both
             lines.append(f"\n=== TOP {top_n} COOLEST COUNTRIES ===")
             opp = _sort_df(country_df, "AverageTemperature", ascending=True)
             if opp is not None and not getattr(opp, "empty", True):
@@ -1425,7 +1425,7 @@ def _build_ranking_block(country_df, region_df, top_n: int, question: str) -> st
 
 
 # =========================
-# FIX-3: COMPARISON BUILDER â€” dedicated function for compare questions
+# FIX-3: COMPARISON BUILDER — dedicated function for compare questions
 # =========================
 
 def _build_comparison_block(question: str, country_df, region_df) -> str:
@@ -1524,7 +1524,7 @@ def _build_comparison_block(question: str, country_df, region_df) -> str:
             lines.append(r_rows[r_cols].to_string(index=False))
 
     if not lines:
-        # Single entity or unrecognised â€” return empty so caller falls back
+        # Single entity or unrecognised — return empty so caller falls back
         return ""
 
     return "\n".join(lines)
@@ -1547,7 +1547,7 @@ def _build_dataset_facts(
 
     main = yearly_df if not getattr(yearly_df, "empty", True) else raw_df
 
-    # â”€â”€ YEAR-SPECIFIC BLOCK â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── YEAR-SPECIFIC BLOCK ──────────────────────────────────────────────
     requested_year = _requested_csv_year(question, main if not getattr(main, "empty", True) else None)
     if requested_year and main is not None and not getattr(main, "empty", True):
         lines.append(f"=== YEAR-SPECIFIC DATA: {requested_year} ===")
@@ -1590,7 +1590,7 @@ def _build_dataset_facts(
         else:
             lines.append(f"No records found for year {requested_year} in the dataset.")
 
-    # â”€â”€ METADATA BLOCK â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── METADATA BLOCK ──────────────────────────────────────────────────
     if main is not None and not getattr(main, "empty", True):
         lines.append("\n=== DATASET METADATA ===")
         lines.append(f"Total records: {len(main)}")
@@ -1645,7 +1645,7 @@ def _build_dataset_facts(
                 first = yearly_summary.iloc[0]
                 latest = yearly_summary.iloc[-1]
                 lines.append(
-                    f"Overall yearly trend: {int(first['Year'])} avg {first['AvgTemperature']:.3f} C â†’ "
+                    f"Overall yearly trend: {int(first['Year'])} avg {first['AvgTemperature']:.3f} C → "
                     f"{int(latest['Year'])} avg {latest['AvgTemperature']:.3f} C "
                     f"(change {(latest['AvgTemperature'] - first['AvgTemperature']):.3f} C)"
                 )
@@ -1656,7 +1656,7 @@ def _build_dataset_facts(
                 lines.append("Yearly average temperatures (last 12 years):")
                 lines.append(_records_table(yearly_summary.tail(12), ["Year", "AvgTemperature"], max_rows=12))
 
-    # â”€â”€ COUNTRY RANKINGS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── COUNTRY RANKINGS ────────────────────────────────────────────────
     if country_df is not None and not getattr(country_df, "empty", True):
         lines.append(f"\n=== COUNTRY RANKINGS (top {top_n}) ===")
 
@@ -1708,7 +1708,7 @@ def _build_dataset_facts(
         if len(matched_countries) >= 2:
             lines.extend(_country_difference_lines(country_df, matched_countries[:4]))
 
-    # â”€â”€ REGIONAL RANKINGS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── REGIONAL RANKINGS ───────────────────────────────────────────────
     if region_df is not None and not getattr(region_df, "empty", True):
         lines.append(f"\n=== REGIONAL RANKINGS (top {top_n}) ===")
 
@@ -1954,7 +1954,7 @@ def _answer_climate_only(question, data, history=None, analysis_state=None):
             f"Follow-up question: {question}"
         )
 
-    # â”€â”€ Reasoning chain â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── Reasoning chain ─────────────────────────────────────────────────
     try:
         intent = detect_intent(enriched_question)
         if intent == Intent.WEATHER:
@@ -1979,7 +1979,7 @@ def _answer_climate_only(question, data, history=None, analysis_state=None):
             "structured_facts": {},
         }
 
-    # â”€â”€ FIX-4: Build dedicated ranking block for rank questions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── FIX-4: Build dedicated ranking block for rank questions ─────────
     ranking_block = ""
     if q_type == "rank":
         ranking_block = _build_ranking_block(
@@ -1989,7 +1989,7 @@ def _answer_climate_only(question, data, history=None, analysis_state=None):
             question,
         )
 
-    # â”€â”€ FIX-3: Build dedicated comparison block for compare questions â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── FIX-3: Build dedicated comparison block for compare questions ───
     comparison_block = ""
     if q_type == "compare":
         comparison_block = _build_comparison_block(
@@ -1998,12 +1998,12 @@ def _answer_climate_only(question, data, history=None, analysis_state=None):
             data.get("regional_trends"),
         )
 
-    # â”€â”€ FIX-2: For meta/debug questions, build a focused metadata-only block â”€â”€
+    # ── FIX-2: For meta/debug questions, build a focused metadata-only block
     meta_block = ""
     if q_type == "meta":
         meta_block = _build_meta_answer_block(question, data.get("main"), data.get("country_trends"), data.get("regional_trends"))
 
-    # â”€â”€ FULL dataset facts â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── FULL dataset facts ───────────────────────────────────────────────
     # For rank/compare/meta, skip the heavy full_facts to keep context lean
     if q_type in ("rank", "compare", "meta"):
         full_facts = ""
@@ -2019,7 +2019,7 @@ def _answer_climate_only(question, data, history=None, analysis_state=None):
 
     full_facts_trimmed = full_facts[:MAX_FACTS_CHARS]
 
-    # â”€â”€ Targeted supplement: entities matched in the question â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── Targeted supplement: entities matched in the question ───────────
     filter_max = max(top_n, 20)
 
     # For rank/compare/meta, skip supplement too
@@ -2053,7 +2053,7 @@ def _answer_climate_only(question, data, history=None, analysis_state=None):
 
     supplement_trimmed = supplement[:MAX_SUPPLEMENT_CHARS]
 
-    # â”€â”€ Dynamic top-N (only for general questions) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── Dynamic top-N (only for general questions) ──────────────────────
     dynamic_section = ""
     if q_type not in ("rank", "compare", "meta"):
         try:
@@ -2068,7 +2068,7 @@ def _answer_climate_only(question, data, history=None, analysis_state=None):
         except Exception as exc:
             logger.warning("get_top_countries failed: %s", exc)
 
-    # â”€â”€ Evidence from chain â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── Evidence from chain ───────────────────────────────────────────────
     # FIX-5: Only use prior evidence for genuine follow-ups
     if is_followup:
         evidence_trimmed = chain.get("evidence", "")[:MAX_EVIDENCE_CHARS]
@@ -2078,7 +2078,7 @@ def _answer_climate_only(question, data, history=None, analysis_state=None):
     # FIX-1 & FIX-5: Only inject prior context for follow-ups
     prior_trimmed = prior_context_section[:MAX_PRIOR_CONTEXT_CHARS] if is_followup else ""
 
-    # â”€â”€ Question-type focus hints â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── Question-type focus hints ────────────────────────────────────────
     focus_hints = {
         "meta": (
             "FOCUS: The user is asking about dataset structure. "
@@ -2092,13 +2092,13 @@ def _answer_climate_only(question, data, history=None, analysis_state=None):
         ),
         "rank": (
             f"FOCUS: Ranking question asking for top {top_n}. "
-            f"Use ONLY the RANKING BLOCK below â€” it has exactly {top_n} rows sorted correctly. "
-            f"List ALL {top_n} entries in order â€” do NOT truncate the list. "
+            f"Use ONLY the RANKING BLOCK below — it has exactly {top_n} rows sorted correctly. "
+            f"List ALL {top_n} entries in order — do NOT truncate the list. "
             "Do NOT reference or repeat any previous answer."
         ),
         "compare": (
             "FOCUS: Comparison question. "
-            "Use ONLY the COMPARISON BLOCK below â€” it contains side-by-side tables and calculated diffs. "
+            "Use ONLY the COMPARISON BLOCK below — it contains side-by-side tables and calculated diffs. "
             "Format your answer as a clear side-by-side comparison with all metrics. "
             "Do NOT reference or repeat any previous answer."
         ),
@@ -2124,39 +2124,39 @@ def _answer_climate_only(question, data, history=None, analysis_state=None):
     }
     focus = focus_hints.get(q_type, focus_hints["general"])
 
-    # â”€â”€ System prompt â€” structured by question type â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    # ── System prompt — structured by question type ─────────────────────
     # FIX-1: prior context injected ONLY for follow-ups, and clearly gated
     if q_type == "meta":
         data_block = f"""
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-META BLOCK (dataset structure â€” use ONLY this)
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+══════════════════════════════════════════════════════════════
+META BLOCK (dataset structure — use ONLY this)
+══════════════════════════════════════════════════════════════
 {meta_block}
 """
     elif q_type == "rank":
         data_block = f"""
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-RANKING BLOCK (top {top_n} â€” use ONLY this for the answer)
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+══════════════════════════════════════════════════════════════
+RANKING BLOCK (top {top_n} — use ONLY this for the answer)
+══════════════════════════════════════════════════════════════
 {ranking_block}
 """
     elif q_type == "compare":
         data_block = f"""
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+══════════════════════════════════════════════════════════════
 COMPARISON BLOCK (use ONLY this for the answer)
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+══════════════════════════════════════════════════════════════
 {comparison_block}
 """
     else:
         data_block = f"""
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+══════════════════════════════════════════════════════════════
 COMPLETE DATASET FACTS
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+══════════════════════════════════════════════════════════════
 {full_facts_trimmed}
 {dynamic_section}
 {supplement_trimmed}
 
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+══════════════════════════════════════════════════════════════
 REASONING CHAIN: {chain.get("chain_name", "climate")}
 {evidence_trimmed}
 """
@@ -2165,13 +2165,13 @@ REASONING CHAIN: {chain.get("chain_name", "climate")}
     followup_block = ""
     if is_followup and prior_trimmed:
         followup_block = f"""
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+══════════════════════════════════════════════════════════════
 PRIOR CONTEXT (follow-up continuity)
-â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+══════════════════════════════════════════════════════════════
 {prior_trimmed}
 """
 
-    system_prompt = f"""You are EcoLens Climate Intelligence AI â€” a precise, data-driven climate assistant.
+    system_prompt = f"""You are EcoLens Climate Intelligence AI — a precise, data-driven climate assistant.
 
 QUESTION TYPE: {q_type.upper()}
 {focus}
@@ -2181,13 +2181,13 @@ QUESTION TYPE: {q_type.upper()}
 
 ANSWER RULES:
 1. NEVER invent numbers. Every figure must come from the data above.
-2. Answer ONLY the current question â€” do NOT summarise or reference previous answers unless follow-up.
-3. DATASET METADATA has exact counts â€” use those for "how many" questions.
+2. Answer ONLY the current question — do NOT summarise or reference previous answers unless follow-up.
+3. DATASET METADATA has exact counts — use those for "how many" questions.
 4. For top-N ranking questions, list ALL N entries without truncating.
 5. For comparison questions, use the COMPARISON BLOCK data with interpretation.
 6. For trend questions, cite the yearly trend table and per-year warming values.
 7. For follow-up questions, build on PRIOR CONTEXT rather than restarting.
-8. Be precise â€” use decimal places as given in the data.
+8. Be precise — use decimal places as given in the data.
 9. End your response with exactly: Source: Historical Climate Dataset
 
 OUTPUT FORMAT RULES (the frontend renders your output as rich HTML):
@@ -2273,7 +2273,7 @@ def _build_meta_answer_block(question: str, main_df, country_df, region_df) -> s
             temp = pd.to_numeric(df["AvgTemperature"], errors="coerce").dropna()
             if not temp.empty:
                 lines.append(
-                    f"Temperature stats â€” mean: {temp.mean():.3f} C, median: {temp.median():.3f} C, "
+                    f"Temperature stats — mean: {temp.mean():.3f} C, median: {temp.median():.3f} C, "
                     f"min: {temp.min():.3f} C, max: {temp.max():.3f} C, std: {temp.std():.3f} C"
                 )
 
@@ -2597,13 +2597,13 @@ def _answer_weather_and_climate(
             )
             weather_evidence = (
                 f"Location: {location_label}\n"
-                f"Temperature: {current.get('temperature_c')} Â°C\n"
-                f"Feels Like: {current.get('feels_like_c')} Â°C\n"
+                f"Temperature: {current.get('temperature_c')} °C\n"
+                f"Feels Like: {current.get('feels_like_c')} °C\n"
                 f"Condition: {current.get('condition')}\n"
                 f"Humidity: {current.get('humidity_percent')}%\n"
                 f"Wind Speed: {current.get('wind_speed_kmh')} km/h\n"
-                f"Today Min: {today.get('min_temperature_c')} Â°C\n"
-                f"Today Max: {today.get('max_temperature_c')} Â°C\n"
+                f"Today Min: {today.get('min_temperature_c')} °C\n"
+                f"Today Max: {today.get('max_temperature_c')} °C\n"
                 f"Rainfall: {today.get('rain_sum_mm')} mm"
             )
     except Exception as exc:
@@ -2647,35 +2647,33 @@ def _answer_weather_and_climate(
         f"REGIONAL TRENDS:\n{safe_preview(regional_trends, top_n)}\n\n"
         f"HOTTEST COUNTRIES:\n{safe_preview(hottest_countries, top_n)}\n\n"
         f"FASTEST WARMING REGIONS:\n{safe_preview(fastest_regions, top_n)}"
-    ) 
+    )
 
-def get_dataset_context() -> str:
-    try:
-        import json
-        schema_path = get_processed_path("schema.json")
-        with open(schema_path) as f:
-            schema = json.load(f)
-        source = get_active_source()
-        label = "the default climate dataset" if source == "default" else "a user-uploaded dataset"
-        cols = ", ".join(schema.get("columns", []))
-        cats = ", ".join(schema.get("categorical_columns", []))
-        nums = ", ".join(schema.get("numeric_columns", []))
-        rows = schema.get("row_count", 0)
-        return (
-            f"\n\nACTIVE DATASET INFO: You are analyzing {label} with {rows} rows. "
-            f"All columns: {cols}. "
-            f"Text/category columns: {cats}. "
-            f"Numeric columns: {nums}. "
-            f"Answer questions using these exact column names."
-        )
-    except Exception:
-        return "" 
-
+    def get_dataset_context() -> str:
+        try:
+            import json
+            schema_path = get_processed_path("schema.json")
+            with open(schema_path) as f:
+                schema = json.load(f)
+            source = get_active_source()
+            label = "the default climate dataset" if source == "default" else "a user-uploaded dataset"
+            cols = ", ".join(schema.get("columns", []))
+            cats = ", ".join(schema.get("categorical_columns", []))
+            nums = ", ".join(schema.get("numeric_columns", []))
+            rows = schema.get("row_count", 0)
+            return (
+                f"\n\nACTIVE DATASET INFO: You are analyzing {label} with {rows} rows. "
+                f"All columns: {cols}. "
+                f"Text/category columns: {cats}. "
+                f"Numeric columns: {nums}. "
+                f"Answer questions using these exact column names."
+            )
+        except Exception:
+            return ""
 
     # FIX-1: only include prior_block when is_followup
     prior_section = prior_block if is_followup else ""
 
-    
     dataset_context = get_dataset_context()
     system_prompt = f"""You are EcoLens Climate Intelligence AI — a precise, data-driven climate assistant.
     {dataset_context}
@@ -2693,7 +2691,7 @@ CSV CLIMATE DATA:
 
 RULES:
 1. Use BOTH live weather and climate CSV data.
-2. For follow-up questions only â€” build on prior context.
+2. For follow-up questions only — build on prior context.
 3. If exact city data is unavailable, use country or regional insights.
 4. Never invent values.
 5. End with: Source: Live Weather + Climate Dataset
@@ -2703,7 +2701,7 @@ OUTPUT FORMAT RULES:
 - ## Climate Context section: use **Label**: value for key climate metrics
 - ## Key Observations section: 2-4 bullet points comparing live vs historical
 - Use markdown tables only for multi-row data (rankings, comparisons)
-{dataset_context}""" 
+{dataset_context}"""
     answer = _llm_answer(system_prompt, enriched_question, history)
 
     if answer.startswith("AI temporarily unavailable"):
@@ -2784,14 +2782,14 @@ def _format_weather_answer(weather: dict) -> str:
     return (
         f"Weather Analysis\n\n"
         f"Location: {location_label}\n"
-        f"Temperature: {current.get('temperature_c', 'N/A')}Â°C\n"
-        f"Feels like: {current.get('feels_like_c', 'N/A')}Â°C\n"
+        f"Temperature: {current.get('temperature_c', 'N/A')}°C\n"
+        f"Feels like: {current.get('feels_like_c', 'N/A')}°C\n"
         f"Condition: {current.get('condition', 'N/A')}\n"
         f"Humidity: {current.get('humidity_percent', 'N/A')}%\n"
         f"Wind: {current.get('wind_speed_kmh', 'N/A')} km/h\n\n"
         f"Forecast:\n"
-        f"Min: {today.get('min_temperature_c', 'N/A')}Â°C\n"
-        f"Max: {today.get('max_temperature_c', 'N/A')}Â°C\n"
+        f"Min: {today.get('min_temperature_c', 'N/A')}°C\n"
+        f"Max: {today.get('max_temperature_c', 'N/A')}°C\n"
         f"Rain: {today.get('rain_sum_mm', 'N/A')} mm\n"
     )
 
@@ -2915,7 +2913,7 @@ def _match_country_for_weather(country_trends, country_name):
         scores = []
         for row_country in country_series:
             if normalized_name == row_country:
-                scores.append(100) 
+                scores.append(100)
             elif normalized_name in row_country:
                 scores.append(50)
             else:
