@@ -29,11 +29,14 @@ from app.data_loader import (
 )
 from app.weather import (
     extract_location,
+    extract_historical_date,
+    is_historical_weather_question,
     format_weather_context,
     get_current_weather,
+    get_historical_weather,
     normalize_weather,
     normalize_location,
-)
+) 
 
 load_dotenv()
 
@@ -911,6 +914,12 @@ def ask_ecolens(question, history=None, data=None, analysis_state=None, default_
             "data_source": "EcoLens",
             "success": False,
         }
+    if answer_mode == "historical_weather":
+        return _answer_historical_weather(
+            question=question,
+            history=history,
+            analysis_state=analysis_state,
+        ) 
 
     if answer_mode == "weather":
         return _answer_weather_only(
@@ -1051,6 +1060,10 @@ def _is_followup_question(question: str) -> bool:
 
 def _select_answer_mode(question: str, history=None, analysis_state=None, data=None) -> str:
     q = str(question).lower()
+    # TEMP DEBUG — remove after testing
+    _hist_date = extract_historical_date(question)
+    _location = extract_location(question)
+    print(f"DEBUG >>> hist_date={_hist_date!r}  location={_location!r}  q={question!r}") 
     analysis_state = analysis_state or {}
     data = data or {}
     has_year = bool(re.search(r"\b(19\d{2}|20\d{2})\b", q))
@@ -1074,7 +1087,7 @@ def _select_answer_mode(question: str, history=None, analysis_state=None, data=N
     temperature_keywords = ["temperature", "temp", "hot", "cold"]
 
     hybrid_keywords = [
-         "weather and climate",
+        "weather and climate",
         "live and csv", "weather with csv",
     ]
 
@@ -1082,12 +1095,45 @@ def _select_answer_mode(question: str, history=None, analysis_state=None, data=N
         "this year", "latest year", "latest", "last year", "past",
         "yearly", "over years", "historical", "history",
     ]
-    if re.search(r"\b(last|past|previous)\s+\d+\s+years?\b", q):
-        return "climate"
 
-    if has_year or any(word in q for word in dataset_time_words):
-        return "climate"
+    # ── STEP 1: Historical weather — unconditionally first ──────────────
+    # Do NOT rely solely on is_historical_weather_question() because it
+    # requires both a date AND weather keywords — "temperature" alone
+    # may not be in its keyword list depending on the query phrasing.
+    # Instead, check directly: has a parseable historical date + a location.
+    _hist_date = extract_historical_date(question)
+    _location  = extract_location(question)
 
+    if _hist_date and _location:
+        # Confirm there's some weather/temperature intent
+        _weather_intent_words = [
+            "weather", "temperature", "temp", "hot", "cold", "rain",
+            "humidity", "wind", "condition", "forecast", "climate",
+            "warm", "cool", "rainfall", "storm",
+        ]
+        if any(w in q for w in _weather_intent_words):
+            return "historical_weather"
+
+    # ── STEP 2: Year present → climate, BUT only if not a weather+location Q ─
+    # Without this guard, "temperature in Chennai in 1995" hits climate.
+    _is_weather_and_location = (
+        any(w in q for w in ["temperature", "temp", "weather", "hot", "cold",
+                              "rain", "humidity", "wind", "condition", "forecast"])
+        and bool(_location)
+    )
+
+    if not _is_weather_and_location:
+        if has_year or any(word in q for word in dataset_time_words):
+            return "climate"
+    else:
+        # Has year + weather + location but no parseable specific date
+        # (e.g. "temperature in Chennai in 2022") → historical_weather
+        if has_year:
+            return "historical_weather"
+        if any(word in q for word in dataset_time_words):
+            return "climate"
+
+    # ── STEP 3: Follow-up ───────────────────────────────────────────────
     if _is_followup_question(question):
         last_source = analysis_state.get("last_source")
         if last_source in {"weather", "climate"}:
@@ -1095,9 +1141,10 @@ def _select_answer_mode(question: str, history=None, analysis_state=None, data=N
         if last_source == "hybrid":
             return "climate"
 
-    wants_csv = any(word in q for word in csv_keywords)
+    # ── STEP 4: Keyword routing ─────────────────────────────────────────
+    wants_csv          = any(word in q for word in csv_keywords)
     wants_live_weather = any(word in q for word in live_weather_keywords)
-    asks_temperature = any(word in q for word in temperature_keywords)
+    asks_temperature   = any(word in q for word in temperature_keywords)
     matches_dataset_place = _question_matches_dataset_place(question, data)
 
     wants_hybrid = any(word in q for word in hybrid_keywords) or (
@@ -1111,7 +1158,7 @@ def _select_answer_mode(question: str, history=None, analysis_state=None, data=N
         return "weather"
     if wants_csv or matches_dataset_place:
         return "climate"
-    if wants_live_weather or (asks_temperature and extract_location(question)):
+    if wants_live_weather or (asks_temperature and _location):
         return "weather"
 
     climate_terms = [
@@ -1123,8 +1170,7 @@ def _select_answer_mode(question: str, history=None, analysis_state=None, data=N
     if any(term in q for term in climate_terms):
         return "climate"
 
-    return "out_of_scope"
-
+    return "out_of_scope" 
 
 def _question_matches_dataset_place(question: str, data=None) -> bool:
     data = data or {}
@@ -1925,7 +1971,128 @@ OUTPUT FORMAT RULES:
         "data_source": WEATHER_SOURCE,
         "success": True,
     }
+def _answer_historical_weather(question, history=None, analysis_state=None):
+    analysis_state = analysis_state or {}
 
+    location = extract_location(question)
+    date_str  = extract_historical_date(question)
+
+    if not location or not date_str:
+        answer = (
+            "Please provide both a location and a time period. "
+            "Examples: 'temperature in Chennai in 2022', "
+            "'weather in Delhi in March 2023', "
+            "'what was the temperature in Mumbai on 5 January 2020'."
+            "\n\nSource: Historical Weather"
+        )
+        return {
+            "response": answer,
+            "analysis_state": _state_for_answer(question, answer, "weather"),
+            "source": "Historical Weather",
+            "success": False,
+        }
+
+    try:
+        weather = get_historical_weather(location, date_str)
+    except Exception as exc:
+        logger.warning("Historical weather failed: %s", exc)
+        answer = (
+            f"Historical weather data for {location} ({date_str}) is unavailable. "
+            f"{str(exc)}\n\nSource: Historical Weather"
+        )
+        return {
+            "response": answer,
+            "analysis_state": _state_for_answer(question, answer, "weather", location=location),
+            "source": "Historical Weather",
+            "success": False,
+        }
+
+    current  = weather.get("current", {})
+    today_w  = weather.get("today", {})
+    place    = weather.get("location", {})
+    mode     = weather.get("mode", "day")
+    label    = weather.get("label", date_str)
+    num_days = weather.get("num_days", 1)
+    monthly  = weather.get("monthly_summary", [])
+
+    location_label = ", ".join(
+        p for p in [place.get("name"), place.get("admin1"), place.get("country")] if p
+    )
+
+    # Build context string depending on query mode
+    if mode == "day":
+        period_desc = f"on {label}"
+        weather_context = (
+            f"Location: {location_label}\n"
+            f"Date: {label}\n"
+            f"Mean Temperature: {current.get('temperature_c')} C\n"
+            f"Max Temperature: {today_w.get('max_temperature_c')} C\n"
+            f"Min Temperature: {today_w.get('min_temperature_c')} C\n"
+            f"Condition: {current.get('condition')}\n"
+            f"Wind Speed: {current.get('wind_speed_kmh')} km/h\n"
+            f"Rainfall: {today_w.get('rain_sum_mm')} mm"
+        )
+    elif mode == "month":
+        period_desc = f"in {label}"
+        weather_context = (
+            f"Location: {location_label}\n"
+            f"Period: {label} ({num_days} days)\n"
+            f"Average Temperature: {current.get('temperature_c')} C\n"
+            f"Highest Daily Max: {today_w.get('max_temperature_c')} C\n"
+            f"Lowest Daily Min: {today_w.get('min_temperature_c')} C\n"
+            f"Total Rainfall: {today_w.get('rain_sum_mm')} mm\n"
+            f"Avg Wind Speed: {current.get('wind_speed_kmh')} km/h\n"
+            f"Dominant Condition: {current.get('condition')}"
+        )
+    else:  # year
+        monthly_lines = "\n".join(
+            f"  {row['month']}: {row['avg_temp']} C" for row in monthly
+        ) if monthly else "  (not available)"
+        period_desc = f"in {label}"
+        weather_context = (
+            f"Location: {location_label}\n"
+            f"Year: {label} ({num_days} days of data)\n"
+            f"Annual Average Temperature: {current.get('temperature_c')} C\n"
+            f"Hottest Day (max): {today_w.get('max_temperature_c')} C\n"
+            f"Coldest Day (min): {today_w.get('min_temperature_c')} C\n"
+            f"Total Annual Rainfall: {today_w.get('rain_sum_mm')} mm\n"
+            f"Avg Wind Speed: {current.get('wind_speed_kmh')} km/h\n"
+            f"Monthly Breakdown:\n{monthly_lines}"
+        )
+
+    period_label_for_heading = f"{location_label} — {label}"
+
+    system_prompt = f"""You are EcoLens AI. Answer like a helpful weather assistant.
+
+HISTORICAL WEATHER DATA for {location_label} {period_desc}:
+{weather_context}
+
+OUTPUT FORMAT RULES:
+- Start with: ## Historical Weather — {period_label_for_heading}
+- Write one natural sentence summary of the period.
+- Output each field on its own line as: **Label**: value
+- For year queries, include a monthly breakdown table: | Month | Avg Temp (C) |
+- Add ## Key Notes with 2-3 bullet points about notable aspects of the weather.
+- End with: Source: Historical Weather Archive (Open-Meteo)
+"""
+
+    answer = _llm_answer(system_prompt, question, history)
+
+    if answer.startswith("AI temporarily unavailable"):
+        answer = (
+            f"Historical weather for {location_label} {period_desc}:\n\n"
+            f"{weather_context}\n\n"
+            f"Source: Historical Weather Archive"
+        )
+
+    return {
+        "response": answer,
+        "formatted_response": _fmt_response(answer, "Historical Weather Archive") if _FMT else answer,
+        "analysis_state": _state_for_answer(question, answer, "weather", location=location),
+        "source": "Historical Weather Archive",
+        "data_source": "Historical Weather Archive",
+        "success": True,
+    } 
 
 # =========================
 # CLIMATE ONLY  (FIX-1, FIX-2, FIX-3, FIX-4, FIX-5)

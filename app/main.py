@@ -105,9 +105,10 @@ def health():
         status["data"] = str(e)
 
     try:
-        validate_openai_key()
-    except OpenAIConfigError as e:
-        status["openai"] = str(e)
+        from app.agent import validate_gemini_key
+        validate_gemini_key()
+    except Exception as e:
+        status["openai"] = str(e) 
 
     return status
 
@@ -210,7 +211,7 @@ def weather(location: str | None = None, request: WeatherRequest | None = None):
 # =========================
 
 @app.post("/ask")
-def ask_ai(payload: RequestBody, current_user: str = Depends(auth.get_current_user)):
+def ask_ai(payload: RequestBody, current_user: Optional[str] = Depends(auth.get_current_user_optional)):
     try:
         history_dicts = [
             {"role": m.role, "content": m.content}
@@ -286,7 +287,16 @@ async def list_uploads():
 
 @app.get("/api/etl/active")
 async def get_active():
-    return {"active": get_active_source()}  
+    return {"active": get_active_source()}
+@app.get("/api/debug/parse")
+async def debug_parse(q: str):
+    from app.weather import extract_location, extract_historical_date, is_historical_weather_question
+    return {
+        "question": q,
+        "location": extract_location(q),
+        "date": extract_historical_date(q),
+        "is_historical": is_historical_weather_question(q),
+    } 
 
 @app.get("/api/etl/schema")
 async def get_schema():
@@ -305,8 +315,9 @@ async def get_schema():
             "row_count": 0,
             "categorical_columns": [],
             "numeric_columns": []
-        }     
-    
+        }
+
+
 
 
 
