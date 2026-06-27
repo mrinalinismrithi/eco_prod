@@ -1,12 +1,9 @@
 """
 EcoLens Authentication
 =======================
-File-based, no-database auth:
-  - Users stored in data/users.json (username + hashed password)
-  - Sessions stored in-memory (token -> username), lost on server restart
-  - Cookie-based session token
-
-This is intentionally simple — suitable for a demo / academic project.
+File-based auth with a hardcoded default user that survives Render restarts.
+New signups are saved to data/users.json (lost on restart — expected on free tier).
+The default admin account always works regardless of restarts.
 """
 
 import json
@@ -17,10 +14,15 @@ from typing import Optional
 
 from fastapi import Cookie, HTTPException, Response
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR   = Path(__file__).resolve().parent.parent
 USERS_FILE = BASE_DIR / "data" / "users.json"
 
-# token -> username   (in-memory; cleared on restart)
+# ── Hardcoded default user (always exists, survives restarts) ─────────────
+# Change these credentials to whatever you want
+DEFAULT_USERNAME = "admin"
+DEFAULT_PASSWORD = "ecolens123"
+
+# token -> username (in-memory; cleared on restart)
 SESSIONS: dict[str, str] = {}
 
 SESSION_COOKIE_NAME = "ecolens_session"
@@ -31,9 +33,14 @@ SESSION_COOKIE_NAME = "ecolens_session"
 # =========================
 
 def _hash_password(password: str) -> str:
-    """Simple salted hash using sha256. Good enough for a demo project."""
-    salt = "ecolens_static_salt"  # static salt is fine for academic scope
+    salt = "ecolens_static_salt"
     return hashlib.sha256((salt + password).encode("utf-8")).hexdigest()
+
+
+DEFAULT_USER = {
+    "username": DEFAULT_USERNAME,
+    "password_hash": _hash_password(DEFAULT_PASSWORD),
+}
 
 
 # =========================
@@ -41,19 +48,35 @@ def _hash_password(password: str) -> str:
 # =========================
 
 def _load_users() -> list[dict]:
-    if not USERS_FILE.exists():
-        return []
-    try:
-        with open(USERS_FILE, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except (json.JSONDecodeError, OSError):
-        return []
+    users = []
+
+    # Always include the default user first
+    users.append(DEFAULT_USER)
+
+    # Load any additional users from file
+    if USERS_FILE.exists():
+        try:
+            with open(USERS_FILE, "r", encoding="utf-8") as f:
+                file_users = json.load(f)
+                for u in file_users:
+                    # Don't duplicate the default user
+                    if u["username"].lower() != DEFAULT_USERNAME.lower():
+                        users.append(u)
+        except (json.JSONDecodeError, OSError):
+            pass
+
+    return users
 
 
 def _save_users(users: list[dict]) -> None:
+    # Save only non-default users to file
+    file_users = [
+        u for u in users
+        if u["username"].lower() != DEFAULT_USERNAME.lower()
+    ]
     USERS_FILE.parent.mkdir(parents=True, exist_ok=True)
     with open(USERS_FILE, "w", encoding="utf-8") as f:
-        json.dump(users, f, indent=2)
+        json.dump(file_users, f, indent=2)
 
 
 def _find_user(users: list[dict], username: str) -> Optional[dict]:
@@ -94,17 +117,15 @@ def signup(username: str, password: str) -> dict:
 
 def login(username: str, password: str, response: Response) -> dict:
     username = username.strip()
-    users = _load_users()
-    user = _find_user(users, username)
+    users    = _load_users()
+    user     = _find_user(users, username)
 
     if not user or user["password_hash"] != _hash_password(password):
         raise HTTPException(status_code=401, detail="Invalid username or password.")
 
-    # Create session token
     token = secrets.token_urlsafe(32)
     SESSIONS[token] = user["username"]
 
-    # Set cookie (HTTP-only so JS can't read it, helps a little against XSS)
     response.set_cookie(
         key=SESSION_COOKIE_NAME,
         value=token,
@@ -128,16 +149,12 @@ def logout(response: Response, session_token: Optional[str]) -> dict:
 
 
 # =========================
-# SESSION CHECK (dependency)
+# SESSION CHECK
 # =========================
 
 def get_current_user(
     ecolens_session: Optional[str] = Cookie(default=None),
 ) -> str:
-    """
-    FastAPI dependency. Raises 401 if not logged in.
-    Use as: current_user: str = Depends(get_current_user)
-    """
     if not ecolens_session or ecolens_session not in SESSIONS:
         raise HTTPException(status_code=401, detail="Not authenticated.")
     return SESSIONS[ecolens_session]
@@ -146,7 +163,6 @@ def get_current_user(
 def get_current_user_optional(
     ecolens_session: Optional[str] = Cookie(default=None),
 ) -> Optional[str]:
-    """Like get_current_user, but returns None instead of raising."""
     if not ecolens_session or ecolens_session not in SESSIONS:
         return None
     return SESSIONS[ecolens_session] 
