@@ -317,6 +317,17 @@ async def get_schema():
             "numeric_columns": []
         }
 
+    @app.get("/api/debug/auth")
+    def debug_auth():
+        from app import auth
+        import inspect
+        source = inspect.getsource(auth._load_users)
+        users = auth._load_users()
+        return {
+            "users": [u["username"] for u in users],
+            "default_username": getattr(auth, "DEFAULT_USERNAME", "NOT FOUND"),
+        } 
+
 
 
 
