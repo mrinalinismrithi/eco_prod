@@ -1,9 +1,9 @@
 """
 EcoLens Authentication
 =======================
-File-based auth with a hardcoded default user that survives Render restarts.
+File-based auth with hardcoded users that survive Render restarts.
 New signups are saved to data/users.json (lost on restart — expected on free tier).
-The default admin account always works regardless of restarts.
+Hardcoded accounts always work regardless of restarts.
 """
 
 import json
@@ -16,11 +16,6 @@ from fastapi import Cookie, HTTPException, Response
 
 BASE_DIR   = Path(__file__).resolve().parent.parent
 USERS_FILE = BASE_DIR / "data" / "users.json"
-
-# ── Hardcoded default user (always exists, survives restarts) ─────────────
-# Change these credentials to whatever you want
-DEFAULT_USERNAME = "admin"
-DEFAULT_PASSWORD = "ecolens123"
 
 # token -> username (in-memory; cleared on restart)
 SESSIONS: dict[str, str] = {}
@@ -37,10 +32,22 @@ def _hash_password(password: str) -> str:
     return hashlib.sha256((salt + password).encode("utf-8")).hexdigest()
 
 
-DEFAULT_USER = {
-    "username": DEFAULT_USERNAME,
-    "password_hash": _hash_password(DEFAULT_PASSWORD),
-}
+# =========================
+# HARDCODED USERS (always exist, survive restarts)
+# =========================
+
+HARDCODED_USERS = [
+    {
+        "username": "admin",
+        "password_hash": _hash_password("ecolens123"),
+    },
+    {
+        "username": "mrinalini",
+        "password_hash": _hash_password("smrithi@123"),
+    },
+]
+
+HARDCODED_USERNAMES = {u["username"].lower() for u in HARDCODED_USERS}
 
 
 # =========================
@@ -48,19 +55,16 @@ DEFAULT_USER = {
 # =========================
 
 def _load_users() -> list[dict]:
-    users = []
+    # Start with hardcoded users
+    users = list(HARDCODED_USERS)
 
-    # Always include the default user first
-    users.append(DEFAULT_USER)
-
-    # Load any additional users from file
+    # Add any additional users from file (signups)
     if USERS_FILE.exists():
         try:
             with open(USERS_FILE, "r", encoding="utf-8") as f:
                 file_users = json.load(f)
                 for u in file_users:
-                    # Don't duplicate the default user
-                    if u["username"].lower() != DEFAULT_USERNAME.lower():
+                    if u["username"].lower() not in HARDCODED_USERNAMES:
                         users.append(u)
         except (json.JSONDecodeError, OSError):
             pass
@@ -69,10 +73,10 @@ def _load_users() -> list[dict]:
 
 
 def _save_users(users: list[dict]) -> None:
-    # Save only non-default users to file
+    # Save only non-hardcoded users to file
     file_users = [
         u for u in users
-        if u["username"].lower() != DEFAULT_USERNAME.lower()
+        if u["username"].lower() not in HARDCODED_USERNAMES
     ]
     USERS_FILE.parent.mkdir(parents=True, exist_ok=True)
     with open(USERS_FILE, "w", encoding="utf-8") as f:
@@ -165,4 +169,4 @@ def get_current_user_optional(
 ) -> Optional[str]:
     if not ecolens_session or ecolens_session not in SESSIONS:
         return None
-    return SESSIONS[ecolens_session] 
+    return SESSIONS[ecolens_session]
