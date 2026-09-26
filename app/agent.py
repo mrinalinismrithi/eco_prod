@@ -871,6 +871,223 @@ RULES:
 """
     return _llm_answer(system_prompt, question, history)
 
+# ════════════════════════════════════════════════════════════════════════
+# STEP 1 — Paste these two functions into agent.py
+#           Location: just BEFORE the ask_ecolens() function
+# ════════════════════════════════════════════════════════════════════════
+
+def _answer_prediction(question, data, history=None, analysis_state=None):
+    """
+    Handle long-term climate temperature prediction questions.
+    Example: "What will India's temperature be in 2030?"
+    Uses linear regression slope already in country_warming_trends.csv.
+    No new model or library needed.
+    """
+    from app.chains import build_prediction_chain
+
+    analysis_state = analysis_state or {}
+    data = data or {}
+
+    chain = build_prediction_chain(
+        question=question,
+        country_trends=data.get("country_trends"),
+        regional_trends=data.get("regional_trends"),
+    )
+
+    evidence    = chain.get("evidence", "No prediction data available.")
+    predictions = chain.get("structured_facts", {}).get("predictions", [])
+
+    system_prompt = f"""You are EcoLens Climate AI — a precise, data-driven climate assistant.
+
+The user is asking for a FUTURE TEMPERATURE PREDICTION based on historical warming trends.
+
+PREDICTION DATA (pre-calculated using linear regression):
+{evidence}
+
+INSTRUCTIONS:
+1. Clearly state this is a PROJECTION based on historical linear regression — not a guarantee.
+2. Show the predicted temperature for the requested year(s) clearly.
+3. Explain the formula simply: predicted temp = latest recorded temp + (warming trend x years ahead).
+4. Mention the warming trend per year for context.
+5. Add a brief note about uncertainty — climate predictions are estimates based on past trends.
+6. Do NOT invent numbers. Use ONLY the values from PREDICTION DATA above.
+7. End with: Source: Historical Climate Dataset (Linear Regression Projection)
+
+OUTPUT FORMAT:
+- ## Climate Temperature Prediction — <Country/Region> heading
+- Stat cards for: Latest Recorded Temp, Warming Trend Per Year, Predicted Temp, Target Year
+- ## How This Was Calculated section explaining the formula simply
+- Use a markdown table if showing multiple years: | Year | Predicted Temp (C) |
+- ## Important Note section about prediction uncertainty
+"""
+
+    answer = _llm_answer(system_prompt, question, history)
+
+    if answer.startswith("AI temporarily unavailable"):
+        if predictions:
+            lines = ["Climate Temperature Prediction (Linear Regression Projection)\n"]
+            for p in predictions[:10]:
+                lines.append(
+                    f"{p.get('Country', 'N/A')} — "
+                    f"Predicted {p.get('TargetYear', 'N/A')}: "
+                    f"{p.get('PredictedTemp_C', 'N/A')} C "
+                    f"(warming trend: {p.get('WarmingTrend_C_per_year', 'N/A')} C/year)"
+                )
+            lines.append("\nNote: Projection based on linear regression of historical data.")
+            lines.append("Source: Historical Climate Dataset (Linear Regression Projection)")
+            answer = "\n".join(lines)
+        else:
+            answer = (
+                "Prediction data unavailable. "
+                "Please specify a country name.\n\n"
+                "Source: Historical Climate Dataset"
+            )
+
+    return {
+        "response": answer,
+        "formatted_response": _fmt_response(
+            answer, "Historical Climate Dataset (Projection)"
+        ) if _FMT else answer,
+        "analysis_state": _state_for_answer(question, answer, "climate"),
+        "source": "Historical Climate Dataset (Linear Regression Projection)",
+        "data_source": "Historical Climate Dataset",
+        "success": True,
+    }
+
+
+def _answer_weather_forecast(question, history=None, analysis_state=None, default_location=None):
+    """
+    Handle short-term weather forecast questions.
+    Example: "What will be tomorrow's weather in Chennai?"
+             "Will it rain this weekend in Delhi?"
+    Uses Open-Meteo forecast API — same API already used in get_current_weather,
+    no new API key or service needed.
+    """
+    from app.chains import build_weather_forecast_chain
+
+    analysis_state = analysis_state or {}
+    location = (
+        extract_location(question)
+        or analysis_state.get("last_location")
+        or default_location
+    )
+
+    if not location:
+        answer = (
+            "Please include a city name so I can fetch the weather forecast.\n\n"
+            "Source: Weather Forecast"
+        )
+        return {
+            "response": answer,
+            "analysis_state": _state_for_answer(question, answer, "weather"),
+            "source": "Weather Forecast",
+            "success": False,
+        }
+
+    chain           = build_weather_forecast_chain(question=question, location=location)
+    evidence        = chain.get("evidence", "")
+    forecast_days   = chain.get("structured_facts", {}).get("forecast_days", [])
+    location_label  = chain.get("structured_facts", {}).get("location", location)
+
+    system_prompt = f"""You are EcoLens Weather AI — a helpful, conversational weather assistant.
+
+The user wants a SHORT-TERM WEATHER FORECAST.
+
+FORECAST DATA:
+{evidence}
+
+INSTRUCTIONS:
+1. Start with ## Weather Forecast — <location> — <period> heading.
+2. Show each day clearly using a markdown table:
+   | Date | Condition | Max (C) | Min (C) | Rain (mm) | Rain % | Wind (km/h) |
+3. After the table add ## Summary with 2-3 natural language sentences about the forecast period.
+4. If rain is expected on any day, highlight it clearly.
+5. Do NOT invent values. Use ONLY the forecast data above.
+6. End with: Source: Weather Forecast (Open-Meteo)
+"""
+
+    answer = _llm_answer(system_prompt, question, history)
+
+    if answer.startswith("AI temporarily unavailable"):
+        if forecast_days:
+            lines = [f"Weather Forecast — {location_label}\n"]
+            lines.append("Date | Max (C) | Min (C) | Condition | Rain (mm) | Wind (km/h)")
+            lines.append("-----|---------|---------|-----------|-----------|------------")
+            for d in forecast_days:
+                lines.append(
+                    f"{d['date']} | {d['max_temperature_c']} | {d['min_temperature_c']} | "
+                    f"{d['condition']} | {d['rain_sum_mm']} | {d['wind_speed_kmh']}"
+                )
+            lines.append("\nSource: Weather Forecast (Open-Meteo)")
+            answer = "\n".join(lines)
+        else:
+            answer = (
+                f"Weather forecast for {location} is currently unavailable.\n\n"
+                "Source: Weather Forecast"
+            )
+
+    return {
+        "response": answer,
+        "formatted_response": _fmt_response(
+            answer, "Weather Forecast (Open-Meteo)"
+        ) if _FMT else answer,
+        "analysis_state": _state_for_answer(
+            question, answer, "weather", location=location
+        ),
+        "source": "Weather Forecast (Open-Meteo)",
+        "data_source": "Weather Forecast",
+        "success": True,
+    }
+
+
+# ════════════════════════════════════════════════════════════════════════
+# STEP 2 — Add these lines at the TOP of _select_answer_mode()
+#           Right after:  q = str(question).lower()
+#           Right before: the existing STEP 1 comment
+# ════════════════════════════════════════════════════════════════════════
+
+# ── STEP 0A: Climate prediction ──────────────────────────────────────────
+_prediction_kw = [
+    "predict", "prediction", "will be in", "will it be",
+    "expected temperature", "projected",
+    "by 2025", "by 2026", "by 2027", "by 2028", "by 2029",
+    "by 2030", "by 2035", "by 2040", "by 2050",
+    "next 5 years", "next 10 years",
+    "temperature in 2025", "temperature in 2026", "temperature in 2027",
+    "temperature in 2028", "temperature in 2029", "temperature in 2030",
+    "temperature in 2035", "temperature in 2040", "temperature in 2050",
+    "what will", "how hot will", "how warm will",
+]
+_forecast_kw = [
+    "tomorrow", "next few days", "this week", "weekend",
+    "next 3 days", "next 7 days", "next week",
+]
+# if any(_prediction_kw) AND NOT any(_forecast_kw) → return "prediction"
+# if any(_forecast_kw) → return "weather_forecast"
+
+
+# ════════════════════════════════════════════════════════════════════════
+# STEP 3 — Add these two conditions inside ask_ecolens()
+#           After:  if answer_mode == "hybrid": ...
+#           Before: the final logger.error fallback
+# ════════════════════════════════════════════════════════════════════════
+
+#     if answer_mode == "prediction":
+#         return _answer_prediction(
+#             question=question,
+#             data=data,
+#             history=history,
+#             analysis_state=analysis_state,
+#         )
+#
+#     if answer_mode == "weather_forecast":
+#         return _answer_weather_forecast(
+#             question=question,
+#             history=history,
+#             analysis_state=analysis_state,
+#             default_location=default_location,
+#         )
+
 
 # =========================
 # MAIN ENTRY

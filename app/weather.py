@@ -715,3 +715,94 @@ Min Temp: {today.get('min_temperature_c')}°C
 Max Temp: {today.get('max_temperature_c')}°C
 Rain: {today.get('rain_sum_mm')} mm
 """
+
+# =========================
+# WEATHER FORECAST (NEW)
+# =========================
+
+def get_weather_forecast(location: str, days: int = 3) -> dict:
+    """
+    Fetch a multi-day weather forecast for a location.
+    Uses the same Open-Meteo FORECAST_URL already used in get_current_weather.
+    days: number of forecast days (1-7). Default 3.
+    No new API key or service needed.
+    """
+    if not location:
+        raise ValueError("Location is required for weather forecast")
+
+    days = min(max(days, 1), 7)
+
+    try:
+        place = geocode_location(location)
+    except Exception as exc:
+        raise ValueError(f"Could not find location '{location}': {exc}")
+
+    logger.info("Fetching %d-day forecast for %s", days, location)
+
+    try:
+        data = _get_json(
+            FORECAST_URL,
+            params={
+                "latitude":      place["latitude"],
+                "longitude":     place["longitude"],
+                "daily": ",".join([
+                    "temperature_2m_max",
+                    "temperature_2m_min",
+                    "temperature_2m_mean",
+                    "precipitation_sum",
+                    "rain_sum",
+                    "precipitation_probability_max",
+                    "weather_code",
+                    "wind_speed_10m_max",
+                ]),
+                "timezone":      "auto",
+                "forecast_days": days + 1,
+            },
+            timeout=(5, 12),
+            label="Weather multi-day forecast",
+            attempts=2,
+        )
+    except Exception as exc:
+        raise ValueError(f"Weather forecast unavailable for '{location}': {exc}")
+
+    daily = data.get("daily", {})
+    times = daily.get("time", [])
+
+    if not times:
+        raise ValueError(f"No forecast data returned for '{location}'")
+
+    forecast_days_list = []
+    for i, day_date in enumerate(times):
+        if i == 0:
+            continue  # skip today — covered by get_current_weather
+        weather_code = int((daily.get("weather_code") or [0])[i] or 0)
+        rain = (daily.get("rain_sum") or [0])[i] or 0
+        precip_prob = (daily.get("precipitation_probability_max") or [None])[i]
+        forecast_days_list.append({
+            "date":                              day_date,
+            "max_temperature_c":                 (daily.get("temperature_2m_max") or [None])[i],
+            "min_temperature_c":                 (daily.get("temperature_2m_min") or [None])[i],
+            "mean_temperature_c":                (daily.get("temperature_2m_mean") or [None])[i],
+            "rain_sum_mm":                       rain,
+            "precipitation_sum_mm":              (daily.get("precipitation_sum") or [0])[i],
+            "precipitation_probability_percent": precip_prob,
+            "wind_speed_kmh":                    (daily.get("wind_speed_10m_max") or [None])[i],
+            "weather_code":                      weather_code,
+            "condition":                         WEATHER_CODES.get(weather_code, "unknown"),
+            "will_rain":                         bool(
+                float(rain) > 0
+                or (precip_prob is not None and float(precip_prob) >= 50)
+            ),
+        })
+
+    return {
+        "location": {
+            "name":      place["name"],
+            "country":   place.get("country"),
+            "admin1":    place.get("admin1"),
+            "latitude":  place["latitude"],
+            "longitude": place["longitude"],
+        },
+        "forecast_days":   forecast_days_list,
+        "days_requested":  days,
+    }

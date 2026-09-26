@@ -312,6 +312,192 @@ def build_comparison_chain(question, country_trends, regional_trends):
         ]),
         "structured_facts": {}
     }
+# These two functions go into chains.py
+# Paste them BEFORE the # ROUTER section
+
+def build_prediction_chain(question: str, country_trends, regional_trends):
+    """
+    Build context for long-term climate temperature prediction.
+    Uses WarmingTrendPerYear (linear regression slope) already in
+    country_warming_trends.csv — no new model needed.
+    Formula: predicted_temp = LatestTemperature + (WarmingTrendPerYear x years_ahead)
+    """
+    import re
+    import pandas as pd
+    from datetime import date
+    from difflib import SequenceMatcher
+
+    q = question.lower()
+    current_year = date.today().year
+
+    # Extract target year from question
+    year_match = re.search(r"\b(202[5-9]|20[3-9]\d|2100)\b", q)
+    target_year = int(year_match.group()) if year_match else None
+
+    # Extract "next N years"
+    years_ahead_match = re.search(r"next\s+(\d+)\s+years?", q)
+    years_ahead = int(years_ahead_match.group(1)) if years_ahead_match else None
+
+    if country_trends is None or getattr(country_trends, "empty", True):
+        return {
+            "chain_name": "prediction",
+            "evidence": "Climate dataset unavailable for prediction.",
+            "structured_facts": {}
+        }
+
+    # Try to match a specific country from the question
+    matched_rows = None
+    if "Country" in country_trends.columns:
+        for country in country_trends["Country"].dropna().astype(str).unique():
+            c_lower = country.lower()
+            if c_lower in q or SequenceMatcher(None, c_lower, q).ratio() > 0.6:
+                matched_rows = country_trends[
+                    country_trends["Country"].astype(str).str.lower() == c_lower
+                ]
+                break
+
+    # No specific country → use all for global/ranking prediction
+    if matched_rows is None or getattr(matched_rows, "empty", True):
+        matched_rows = country_trends
+
+    lines = [
+        "=== CLIMATE PREDICTION DATA ===",
+        "Method: Linear Regression (WarmingTrendPerYear already computed from historical data)",
+        "Formula: PredictedTemp = LatestTemperature + (WarmingTrendPerYear x YearsAhead)",
+        "",
+    ]
+
+    predictions = []
+    for _, row in matched_rows.iterrows():
+        country   = row.get("Country", "Unknown")
+        latest_t  = pd.to_numeric(row.get("LatestTemperature"), errors="coerce")
+        latest_yr = pd.to_numeric(row.get("LatestYear"), errors="coerce")
+        trend     = pd.to_numeric(row.get("WarmingTrendPerYear"), errors="coerce")
+
+        if pd.isna(latest_t) or pd.isna(trend) or pd.isna(latest_yr):
+            continue
+
+        base_year = int(latest_yr)
+
+        if target_year:
+            yrs = max(target_year - base_year, 0)
+            predicted = round(float(latest_t) + float(trend) * yrs, 3)
+            predictions.append({
+                "Country":                  country,
+                "LatestTemp_C":             round(float(latest_t), 3),
+                "LatestYear":               base_year,
+                "WarmingTrend_C_per_year":  round(float(trend), 4),
+                "TargetYear":               target_year,
+                "YearsAhead":               yrs,
+                "PredictedTemp_C":          predicted,
+            })
+
+        elif years_ahead:
+            for yr in range(current_year + 1, current_year + years_ahead + 1):
+                yrs = max(yr - base_year, 0)
+                predictions.append({
+                    "Country":                  country,
+                    "LatestTemp_C":             round(float(latest_t), 3),
+                    "WarmingTrend_C_per_year":  round(float(trend), 4),
+                    "TargetYear":               yr,
+                    "YearsAhead":               yrs,
+                    "PredictedTemp_C":          round(float(latest_t) + float(trend) * yrs, 3),
+                })
+
+        else:
+            # Default: next 5 years
+            for yr in range(current_year + 1, current_year + 6):
+                yrs = max(yr - base_year, 0)
+                predictions.append({
+                    "Country":                  country,
+                    "LatestTemp_C":             round(float(latest_t), 3),
+                    "WarmingTrend_C_per_year":  round(float(trend), 4),
+                    "TargetYear":               yr,
+                    "YearsAhead":               yrs,
+                    "PredictedTemp_C":          round(float(latest_t) + float(trend) * yrs, 3),
+                })
+
+    if predictions:
+        pred_df = pd.DataFrame(predictions)
+        lines.append(pred_df.to_string(index=False))
+        lines.append("")
+        lines.append("NOTES:")
+        lines.append("- WarmingTrend is degrees Celsius per year (positive = warming).")
+        lines.append("- Predictions are projections — actual future temps may vary.")
+        lines.append("- Label clearly as projections, not recorded data.")
+    else:
+        lines.append("No matching country data found. Ensure country name is in the dataset.")
+
+    return {
+        "chain_name": "prediction",
+        "evidence": "\n".join(lines),
+        "structured_facts": {"predictions": predictions}
+    }
+
+
+def build_weather_forecast_chain(question: str, location: str):
+    """
+    Build context for short-term weather forecast.
+    Example: "What will be tomorrow's weather in Chennai?"
+    Uses get_weather_forecast() from weather.py — same Open-Meteo API,
+    no new API key needed.
+    """
+    from app.weather import extract_location, get_weather_forecast
+
+    loc = extract_location(question) or location
+
+    if not loc:
+        return {
+            "chain_name": "weather_forecast",
+            "evidence": "No location found. Please include a city name.",
+            "structured_facts": {}
+        }
+
+    q = question.lower()
+    if "7 day" in q or "next week" in q or "this week" in q:
+        days = 7
+    elif "5 day" in q:
+        days = 5
+    elif "3 day" in q or "few days" in q or "weekend" in q:
+        days = 3
+    else:
+        days = 1  # default: tomorrow only
+
+    try:
+        forecast = get_weather_forecast(loc, days=days)
+    except Exception as exc:
+        return {
+            "chain_name": "weather_forecast",
+            "evidence": f"Weather forecast unavailable: {exc}",
+            "structured_facts": {}
+        }
+
+    place = forecast.get("location", {})
+    location_label = ", ".join(
+        p for p in [place.get("name"), place.get("admin1"), place.get("country")] if p
+    )
+
+    lines = [f"=== WEATHER FORECAST FOR {location_label.upper()} ==="]
+    for day in forecast.get("forecast_days", []):
+        lines.append(
+            f"Date: {day['date']} | "
+            f"Max: {day['max_temperature_c']} C | "
+            f"Min: {day['min_temperature_c']} C | "
+            f"Condition: {day['condition']} | "
+            f"Rain: {day['rain_sum_mm']} mm | "
+            f"Rain probability: {day['precipitation_probability_percent']}% | "
+            f"Wind: {day['wind_speed_kmh']} km/h | "
+            f"Will rain: {day['will_rain']}"
+        )
+
+    return {
+        "chain_name": "weather_forecast",
+        "evidence": "\n".join(lines),
+        "structured_facts": {
+            "location": location_label,
+            "forecast_days": forecast.get("forecast_days", [])
+        }
+    }
 
 
 # ----------------------------
