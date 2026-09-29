@@ -1280,7 +1280,7 @@ def _select_answer_mode(question: str, history=None, analysis_state=None, data=N
     # TEMP DEBUG — remove after testing
     _hist_date = extract_historical_date(question)
     _location = extract_location(question)
-    print(f"DEBUG >>> hist_date={_hist_date!r}  location={_location!r}  q={question!r}") 
+    print(f"DEBUG >>> hist_date={_hist_date!r}  location={_location!r}  q={question!r}")
     analysis_state = analysis_state or {}
     data = data or {}
     has_year = bool(re.search(r"\b(19\d{2}|20\d{2})\b", q))
@@ -1296,8 +1296,10 @@ def _select_answer_mode(question: str, history=None, analysis_state=None, data=N
         "region", "regions", "country climate", "how many", "top",
     ]
 
+    # CHANGED — removed "forecast" from live_weather_keywords
+    # so forecast questions are not caught here before the forecast check below
     live_weather_keywords = [
-        "weather", "today", "now", "live", "current", "forecast", "rain",
+        "weather", "today", "now", "live", "current", "rain",
         "humidity", "wind", "condition", "conditions", "feels like",
     ]
 
@@ -1313,16 +1315,41 @@ def _select_answer_mode(question: str, history=None, analysis_state=None, data=N
         "yearly", "over years", "historical", "history",
     ]
 
+    # ── STEP 0A: Climate prediction — must run first ────────────────────
+    # Questions like: "What will India's temperature be in 2030?"
+    #                 "Predict Brazil temperature for next 5 years"
+    #                 "Which country will be hottest by 2035?"
+    _prediction_kw = [
+        "predict", "prediction", "will be in", "will it be",
+        "expected temperature", "projected",
+        "by 2025", "by 2026", "by 2027", "by 2028", "by 2029",
+        "by 2030", "by 2035", "by 2040", "by 2050",
+        "next 5 years", "next 10 years",
+        "temperature in 2025", "temperature in 2026", "temperature in 2027",
+        "temperature in 2028", "temperature in 2029", "temperature in 2030",
+        "temperature in 2035", "temperature in 2040", "temperature in 2050",
+        "what will", "how hot will", "how warm will",
+    ]
+    _forecast_kw = [
+        "tomorrow", "next few days", "this week", "weekend",
+        "next 3 days", "next 7 days", "next week",
+        "3 day forecast", "7 day forecast",
+    ]
+    if any(k in q for k in _prediction_kw) and not any(k in q for k in _forecast_kw):
+        return "prediction"
+
+    # ── STEP 0B: Short-term weather forecast — must run before weather ──
+    # Questions like: "What will be tomorrow's weather in Chennai?"
+    #                 "Will it rain this weekend in Delhi?"
+    #                 "3 day forecast for Mumbai"
+    if any(k in q for k in _forecast_kw):
+        return "weather_forecast"
+
     # ── STEP 1: Historical weather — unconditionally first ──────────────
-    # Do NOT rely solely on is_historical_weather_question() because it
-    # requires both a date AND weather keywords — "temperature" alone
-    # may not be in its keyword list depending on the query phrasing.
-    # Instead, check directly: has a parseable historical date + a location.
     _hist_date = extract_historical_date(question)
     _location  = extract_location(question)
 
     if _hist_date and _location:
-        # Confirm there's some weather/temperature intent
         _weather_intent_words = [
             "weather", "temperature", "temp", "hot", "cold", "rain",
             "humidity", "wind", "condition", "forecast", "climate",
@@ -1331,8 +1358,7 @@ def _select_answer_mode(question: str, history=None, analysis_state=None, data=N
         if any(w in q for w in _weather_intent_words):
             return "historical_weather"
 
-    # ── STEP 2: Year present → climate, BUT only if not a weather+location Q ─
-    # Without this guard, "temperature in Chennai in 1995" hits climate.
+    # ── STEP 2: Year present → climate ─────────────────────────────────
     _is_weather_and_location = (
         any(w in q for w in ["temperature", "temp", "weather", "hot", "cold",
                               "rain", "humidity", "wind", "condition", "forecast"])
@@ -1343,8 +1369,6 @@ def _select_answer_mode(question: str, history=None, analysis_state=None, data=N
         if has_year or any(word in q for word in dataset_time_words):
             return "climate"
     else:
-        # Has year + weather + location but no parseable specific date
-        # (e.g. "temperature in Chennai in 2022") → historical_weather
         if has_year:
             return "historical_weather"
         if any(word in q for word in dataset_time_words):
@@ -1387,8 +1411,7 @@ def _select_answer_mode(question: str, history=None, analysis_state=None, data=N
     if any(term in q for term in climate_terms):
         return "climate"
 
-    return "out_of_scope" 
-
+    return "out_of_scope"
 def _question_matches_dataset_place(question: str, data=None) -> bool:
     data = data or {}
     q = str(question).lower()
