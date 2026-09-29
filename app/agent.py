@@ -1163,6 +1163,22 @@ def ask_ecolens(question, history=None, data=None, analysis_state=None, default_
             analysis_state=analysis_state,
         )
 
+    if answer_mode == "prediction":
+        return _answer_prediction(
+            question=question,
+            data=data,
+            history=history,
+            analysis_state=analysis_state,
+        )
+
+    if answer_mode == "weather_forecast":
+        return _answer_weather_forecast(
+            question=question,
+            history=history,
+            analysis_state=analysis_state,
+            default_location=default_location,
+        )
+
     logger.error(
         "ask_ecolens reached unhandled answer_mode=%r for question: %.200s",
         answer_mode, question,
