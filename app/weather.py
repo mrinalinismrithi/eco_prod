@@ -720,17 +720,22 @@ Rain: {today.get('rain_sum_mm')} mm
 # WEATHER FORECAST (NEW)
 # =========================
 
-def get_weather_forecast(location: str, days: int = 3) -> dict:
+# ════════════════════════════════════════════════════════════════════════
+# REPLACE the existing get_weather_forecast() in app/weather.py
+# with this complete version
+# ════════════════════════════════════════════════════════════════════════
+
+def get_weather_forecast(location: str, days: int = 7) -> dict:
     """
     Fetch a multi-day weather forecast for a location.
     Uses the same Open-Meteo FORECAST_URL already used in get_current_weather.
-    days: number of forecast days (1-7). Default 3.
-    No new API key or service needed.
+    days: number of forecast days (1-7). Clamped to 7 max (API limit).
+    No new API key needed.
     """
     if not location:
         raise ValueError("Location is required for weather forecast")
 
-    days = min(max(days, 1), 7)
+    days = min(max(int(days), 1), 7)
 
     try:
         place = geocode_location(location)
@@ -756,11 +761,11 @@ def get_weather_forecast(location: str, days: int = 3) -> dict:
                     "wind_speed_10m_max",
                 ]),
                 "timezone":      "auto",
-                "forecast_days": days + 1,
+                "forecast_days": days + 1,  # +1 to include today (index 0, skipped later)
             },
-            timeout=(5, 12),
+            timeout=(6, 15),
             label="Weather multi-day forecast",
-            attempts=2,
+            attempts=3,
         )
     except Exception as exc:
         raise ValueError(f"Weather forecast unavailable for '{location}': {exc}")
@@ -774,23 +779,23 @@ def get_weather_forecast(location: str, days: int = 3) -> dict:
     forecast_days_list = []
     for i, day_date in enumerate(times):
         if i == 0:
-            continue  # skip today — covered by get_current_weather
-        weather_code = int((daily.get("weather_code") or [0])[i] or 0)
-        rain = (daily.get("rain_sum") or [0])[i] or 0
-        precip_prob = (daily.get("precipitation_probability_max") or [None])[i]
+            continue  # index 0 = today, skip it
+        weather_code = int((daily.get("weather_code") or [0] * (i + 1))[i] or 0)
+        rain = float((daily.get("rain_sum") or [0] * (i + 1))[i] or 0)
+        precip_prob = (daily.get("precipitation_probability_max") or [None] * (i + 1))[i]
         forecast_days_list.append({
             "date":                              day_date,
-            "max_temperature_c":                 (daily.get("temperature_2m_max") or [None])[i],
-            "min_temperature_c":                 (daily.get("temperature_2m_min") or [None])[i],
-            "mean_temperature_c":                (daily.get("temperature_2m_mean") or [None])[i],
+            "max_temperature_c":                 (daily.get("temperature_2m_max") or [None] * (i + 1))[i],
+            "min_temperature_c":                 (daily.get("temperature_2m_min") or [None] * (i + 1))[i],
+            "mean_temperature_c":                (daily.get("temperature_2m_mean") or [None] * (i + 1))[i],
             "rain_sum_mm":                       rain,
-            "precipitation_sum_mm":              (daily.get("precipitation_sum") or [0])[i],
+            "precipitation_sum_mm":              float((daily.get("precipitation_sum") or [0] * (i + 1))[i] or 0),
             "precipitation_probability_percent": precip_prob,
-            "wind_speed_kmh":                    (daily.get("wind_speed_10m_max") or [None])[i],
+            "wind_speed_kmh":                    (daily.get("wind_speed_10m_max") or [None] * (i + 1))[i],
             "weather_code":                      weather_code,
             "condition":                         WEATHER_CODES.get(weather_code, "unknown"),
             "will_rain":                         bool(
-                float(rain) > 0
+                rain > 0
                 or (precip_prob is not None and float(precip_prob) >= 50)
             ),
         })
@@ -803,6 +808,6 @@ def get_weather_forecast(location: str, days: int = 3) -> dict:
             "latitude":  place["latitude"],
             "longitude": place["longitude"],
         },
-        "forecast_days":   forecast_days_list,
-        "days_requested":  days,
+        "forecast_days":  forecast_days_list,
+        "days_requested": days,
     }

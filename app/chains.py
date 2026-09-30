@@ -435,14 +435,25 @@ def build_prediction_chain(question: str, country_trends, regional_trends):
     }
 
 
+# ════════════════════════════════════════════════════════════════════════
+# REPLACE the existing build_weather_forecast_chain() in app/chains.py
+# with this complete version
+# ════════════════════════════════════════════════════════════════════════
+
 def build_weather_forecast_chain(question: str, location: str):
     """
-    Build context for short-term weather forecast.
-    Example: "What will be tomorrow's weather in Chennai?"
-    Uses get_weather_forecast() from weather.py — same Open-Meteo API,
-    no new API key needed.
+    Handles ALL three forecast cases:
+    1. Tomorrow     → "what will be tomorrow's weather in Chennai?"
+    2. Next N days  → "next 7 days weather in Coimbatore"
+    3. Specific date→ "weather in Coimbatore on December 12, 2026"
+
+    For dates within 7 days   → fetch full forecast from Open-Meteo
+    For dates beyond 7 days   → fetch 7-day forecast + explain limitation
+    For past dates            → redirect to historical_weather
     """
-    from app.weather import extract_location, get_weather_forecast
+    import re
+    from datetime import date, datetime
+    from app.weather import extract_location, get_weather_forecast, extract_historical_date
 
     loc = extract_location(question) or location
 
@@ -450,26 +461,78 @@ def build_weather_forecast_chain(question: str, location: str):
         return {
             "chain_name": "weather_forecast",
             "evidence": "No location found. Please include a city name.",
-            "structured_facts": {}
+            "structured_facts": {"error": "no_location"}
         }
 
     q = question.lower()
-    if "7 day" in q or "next week" in q or "this week" in q:
-        days = 7
-    elif "5 day" in q:
-        days = 5
-    elif "3 day" in q or "few days" in q or "weekend" in q:
-        days = 3
-    else:
-        days = 1  # default: tomorrow only
+    today = date.today()
 
+    # ── Determine how many days / which date ────────────────────────────
+    days = 7   # default
+    target_date = None
+    beyond_range = False
+    beyond_date_str = None
+
+    # Check for specific future date in question
+    date_str = extract_historical_date(question)
+    if date_str:
+        try:
+            if len(date_str) == 10:   # YYYY-MM-DD
+                parsed = datetime.strptime(date_str, "%Y-%m-%d").date()
+            elif len(date_str) == 7:  # YYYY-MM
+                parsed = datetime.strptime(date_str + "-01", "%Y-%m-%d").date()
+            else:                     # YYYY
+                parsed = datetime.strptime(date_str + "-01-01", "%Y-%m-%d").date()
+
+            days_ahead = (parsed - today).days
+
+            if days_ahead < 0:
+                # Past date — should have been caught by historical_weather
+                # but handle gracefully
+                return {
+                    "chain_name": "weather_forecast",
+                    "evidence": f"The date {date_str} is in the past. Ask about past weather instead.",
+                    "structured_facts": {"error": "past_date", "date": date_str}
+                }
+            elif days_ahead == 0:
+                days = 1
+                target_date = date_str
+            elif days_ahead <= 7:
+                days = days_ahead
+                target_date = date_str
+            else:
+                # Beyond 7 days — fetch what we can + note limitation
+                beyond_range = True
+                beyond_date_str = parsed.strftime("%B %d, %Y")
+                days = 7  # fetch max available
+        except ValueError:
+            pass
+
+    else:
+        # No specific date — check for period keywords
+        if "tomorrow" in q:
+            days = 1
+        elif "7 day" in q or "seven day" in q or "next week" in q or "this week" in q:
+            days = 7
+        elif "5 day" in q or "five day" in q:
+            days = 5
+        elif "3 day" in q or "three day" in q or "few days" in q:
+            days = 3
+        elif "weekend" in q:
+            days = 3
+        else:
+            days = 7  # default to full 7-day forecast
+
+    # ── Fetch forecast ───────────────────────────────────────────────────
     try:
         forecast = get_weather_forecast(loc, days=days)
+        print(f"DEBUG FORECAST >>> location={loc} days={days} returned={len(forecast.get('forecast_days', []))} days")
     except Exception as exc:
+        print(f"DEBUG FORECAST ERROR >>> location={loc} error={exc}")
         return {
             "chain_name": "weather_forecast",
-            "evidence": f"Weather forecast unavailable: {exc}",
-            "structured_facts": {}
+            "evidence": f"Weather forecast unavailable for {loc}: {exc}",
+            "structured_facts": {"error": str(exc)}
         }
 
     place = forecast.get("location", {})
@@ -477,12 +540,37 @@ def build_weather_forecast_chain(question: str, location: str):
         p for p in [place.get("name"), place.get("admin1"), place.get("country")] if p
     )
 
-    lines = [f"=== WEATHER FORECAST FOR {location_label.upper()} ==="]
-    for day in forecast.get("forecast_days", []):
+    forecast_days_data = forecast.get("forecast_days", [])
+
+    if not forecast_days_data:
+        return {
+            "chain_name": "weather_forecast",
+            "evidence": f"No forecast data returned for {location_label}.",
+            "structured_facts": {"error": "empty_forecast"}
+        }
+
+    # ── Build evidence text ──────────────────────────────────────────────
+    period_label = "Tomorrow" if days == 1 else f"Next {days} Days"
+    if beyond_range:
+        lines = [
+            f"=== WEATHER FORECAST FOR {location_label.upper()} ===",
+            f"NOTE: You asked about {beyond_date_str} which is beyond the 7-day forecast limit.",
+            f"Showing the next 7 days of available forecast data instead.",
+            f"For long-range temperature estimates beyond 7 days, use the climate prediction feature.",
+            "",
+            f"AVAILABLE FORECAST — {period_label.upper()}:",
+        ]
+    else:
+        lines = [
+            f"=== WEATHER FORECAST FOR {location_label.upper()} — {period_label.upper()} ===",
+        ]
+
+    for day in forecast_days_data:
         lines.append(
             f"Date: {day['date']} | "
             f"Max: {day['max_temperature_c']} C | "
             f"Min: {day['min_temperature_c']} C | "
+            f"Mean: {day['mean_temperature_c']} C | "
             f"Condition: {day['condition']} | "
             f"Rain: {day['rain_sum_mm']} mm | "
             f"Rain probability: {day['precipitation_probability_percent']}% | "
@@ -494,11 +582,14 @@ def build_weather_forecast_chain(question: str, location: str):
         "chain_name": "weather_forecast",
         "evidence": "\n".join(lines),
         "structured_facts": {
-            "location": location_label,
-            "forecast_days": forecast.get("forecast_days", [])
+            "location":       location_label,
+            "forecast_days":  forecast_days_data,
+            "days":           days,
+            "beyond_range":   beyond_range,
+            "beyond_date":    beyond_date_str,
+            "target_date":    target_date,
         }
     }
-
 
 # ----------------------------
 # ROUTER

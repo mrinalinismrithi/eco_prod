@@ -955,13 +955,17 @@ OUTPUT FORMAT:
     }
 
 
+# ════════════════════════════════════════════════════════════════════════
+# REPLACE the existing _answer_weather_forecast() in app/agent.py
+# with this complete version
+# ════════════════════════════════════════════════════════════════════════
+
 def _answer_weather_forecast(question, history=None, analysis_state=None, default_location=None):
     """
-    Handle short-term weather forecast questions.
-    Example: "What will be tomorrow's weather in Chennai?"
-             "Will it rain this weekend in Delhi?"
-    Uses Open-Meteo forecast API — same API already used in get_current_weather,
-    no new API key or service needed.
+    Handles ALL three forecast cases:
+    1. Tomorrow      - "what will be tomorrow's weather in Chennai?"
+    2. Next N days   - "next 7 days weather in Coimbatore"
+    3. Specific date - "weather in Coimbatore on December 12, 2026"
     """
     from app.chains import build_weather_forecast_chain
 
@@ -975,56 +979,153 @@ def _answer_weather_forecast(question, history=None, analysis_state=None, defaul
     if not location:
         answer = (
             "Please include a city name so I can fetch the weather forecast.\n\n"
-            "Source: Weather Forecast"
+            "Examples:\n"
+            "- Tomorrow's weather in Chennai\n"
+            "- Next 7 days forecast for Coimbatore\n"
+            "- Weather in Mumbai this week\n\n"
+            "Source: Weather Forecast (Open-Meteo)"
         )
         return {
             "response": answer,
+            "formatted_response": _fmt_response(answer, "Weather Forecast") if _FMT else answer,
             "analysis_state": _state_for_answer(question, answer, "weather"),
             "source": "Weather Forecast",
             "success": False,
         }
 
-    chain           = build_weather_forecast_chain(question=question, location=location)
-    evidence        = chain.get("evidence", "")
-    forecast_days   = chain.get("structured_facts", {}).get("forecast_days", [])
-    location_label  = chain.get("structured_facts", {}).get("location", location)
+    # Build forecast chain — handles tomorrow, N days, specific date
+    chain          = build_weather_forecast_chain(question=question, location=location)
+    evidence       = chain.get("evidence", "")
+    forecast_days  = chain.get("structured_facts", {}).get("forecast_days", [])
+    location_label = chain.get("structured_facts", {}).get("location", location)
+    beyond_range   = chain.get("structured_facts", {}).get("beyond_range", False)
+    beyond_date    = chain.get("structured_facts", {}).get("beyond_date", None)
+    days           = chain.get("structured_facts", {}).get("days", 7)
+    error          = chain.get("structured_facts", {}).get("error", None)
+
+    # ── Handle errors from chain ─────────────────────────────────────────
+    if error == "no_location":
+        answer = (
+            f"I could not find the city name in your question. "
+            f"Please include a city name.\n\n"
+            f"Examples:\n"
+            f"- Tomorrow's weather in Chennai\n"
+            f"- Next 7 days forecast for Coimbatore\n\n"
+            f"Source: Weather Forecast"
+        )
+        return {
+            "response": answer,
+            "formatted_response": _fmt_response(answer, "Weather Forecast") if _FMT else answer,
+            "analysis_state": _state_for_answer(question, answer, "weather"),
+            "source": "Weather Forecast",
+            "success": False,
+        }
+
+    if error == "past_date":
+        answer = (
+            f"The date you asked about is in the past. "
+            f"For past weather, ask like this:\n"
+            f"- 'What was the weather in Chennai on January 5, 2023?'\n\n"
+            f"For future weather, ask like this:\n"
+            f"- 'Tomorrow's weather in Chennai'\n"
+            f"- 'Next 7 days forecast for Coimbatore'\n\n"
+            f"Source: Weather Forecast"
+        )
+        return {
+            "response": answer,
+            "formatted_response": _fmt_response(answer, "Weather Forecast") if _FMT else answer,
+            "analysis_state": _state_for_answer(question, answer, "weather"),
+            "source": "Weather Forecast",
+            "success": False,
+        }
+
+    if not forecast_days:
+        answer = (
+            f"I was unable to fetch the weather forecast for {location_label}. "
+            f"This could be because:\n"
+            f"- The city name was not recognised\n"
+            f"- The weather service is temporarily unavailable\n\n"
+            f"Please try:\n"
+            f"- Checking the spelling of the city name\n"
+            f"- Asking for today's weather instead\n"
+            f"- Trying again in a few seconds\n\n"
+            f"Source: Weather Forecast (Open-Meteo)"
+        )
+        return {
+            "response": answer,
+            "formatted_response": _fmt_response(answer, "Weather Forecast") if _FMT else answer,
+            "analysis_state": _state_for_answer(question, answer, "weather", location=location),
+            "source": "Weather Forecast",
+            "success": False,
+        }
+
+    # ── Determine period label for prompt ────────────────────────────────
+    q = question.lower()
+    if "tomorrow" in q:
+        period = "tomorrow"
+    elif days == 7:
+        period = "the next 7 days"
+    elif days == 1:
+        period = "tomorrow"
+    else:
+        period = f"the next {days} days"
+
+    # ── Build system prompt ──────────────────────────────────────────────
+    beyond_note = ""
+    if beyond_range and beyond_date:
+        beyond_note = f"""
+IMPORTANT NOTE TO INCLUDE IN YOUR ANSWER:
+The user asked about {beyond_date}, which is more than 7 days away.
+Weather forecasts are only available up to 7 days ahead.
+You are showing the next 7 days of available data instead.
+Tell the user this clearly and suggest they use the climate prediction
+feature for long-range temperature estimates.
+"""
 
     system_prompt = f"""You are EcoLens Weather AI — a helpful, conversational weather assistant.
 
-The user wants a SHORT-TERM WEATHER FORECAST.
+The user wants a weather forecast for {location_label} for {period}.
 
 FORECAST DATA:
 {evidence}
+{beyond_note}
 
 INSTRUCTIONS:
-1. Start with ## Weather Forecast — <location> — <period> heading.
-2. Show each day clearly using a markdown table:
+1. Start with ## Weather Forecast — {location_label} — {period.title()} heading.
+2. Show each day in a clean markdown table:
    | Date | Condition | Max (C) | Min (C) | Rain (mm) | Rain % | Wind (km/h) |
-3. After the table add ## Summary with 2-3 natural language sentences about the forecast period.
-4. If rain is expected on any day, highlight it clearly.
-5. Do NOT invent values. Use ONLY the forecast data above.
-6. End with: Source: Weather Forecast (Open-Meteo)
+3. After the table add ## Summary with 2-3 natural sentences about the overall forecast.
+4. If any day has rain probability above 50% or rain > 0mm, highlight it clearly.
+5. If tomorrow is included, give it extra attention with specific details.
+6. If beyond_note is present, include it clearly as ## Important Note section.
+7. Do NOT invent values. Use ONLY the forecast data above.
+8. End with: Source: Weather Forecast (Open-Meteo)
 """
 
     answer = _llm_answer(system_prompt, question, history)
 
+    # ── Fallback if LLM fails ────────────────────────────────────────────
     if answer.startswith("AI temporarily unavailable"):
-        if forecast_days:
-            lines = [f"Weather Forecast — {location_label}\n"]
-            lines.append("Date | Max (C) | Min (C) | Condition | Rain (mm) | Wind (km/h)")
-            lines.append("-----|---------|---------|-----------|-----------|------------")
-            for d in forecast_days:
-                lines.append(
-                    f"{d['date']} | {d['max_temperature_c']} | {d['min_temperature_c']} | "
-                    f"{d['condition']} | {d['rain_sum_mm']} | {d['wind_speed_kmh']}"
-                )
-            lines.append("\nSource: Weather Forecast (Open-Meteo)")
-            answer = "\n".join(lines)
-        else:
-            answer = (
-                f"Weather forecast for {location} is currently unavailable.\n\n"
-                "Source: Weather Forecast"
+        lines = [f"Weather Forecast — {location_label} — {period.title()}\n"]
+        if beyond_range and beyond_date:
+            lines.append(
+                f"Note: You asked about {beyond_date} which is beyond the 7-day "
+                f"forecast limit. Showing next 7 days instead.\n"
             )
+        lines.append("Date | Max (C) | Min (C) | Condition | Rain (mm) | Rain % | Wind (km/h)")
+        lines.append("-----|---------|---------|-----------|-----------|--------|------------")
+        for d in forecast_days:
+            lines.append(
+                f"{d['date']} | "
+                f"{d['max_temperature_c']} | "
+                f"{d['min_temperature_c']} | "
+                f"{d['condition']} | "
+                f"{d['rain_sum_mm']} | "
+                f"{d['precipitation_probability_percent']}% | "
+                f"{d['wind_speed_kmh']}"
+            )
+        lines.append("\nSource: Weather Forecast (Open-Meteo)")
+        answer = "\n".join(lines)
 
     return {
         "response": answer,
@@ -1038,56 +1139,6 @@ INSTRUCTIONS:
         "data_source": "Weather Forecast",
         "success": True,
     }
-
-
-# ════════════════════════════════════════════════════════════════════════
-# STEP 2 — Add these lines at the TOP of _select_answer_mode()
-#           Right after:  q = str(question).lower()
-#           Right before: the existing STEP 1 comment
-# ════════════════════════════════════════════════════════════════════════
-
-# ── STEP 0A: Climate prediction ──────────────────────────────────────────
-_prediction_kw = [
-    "predict", "prediction", "will be in", "will it be",
-    "expected temperature", "projected",
-    "by 2025", "by 2026", "by 2027", "by 2028", "by 2029",
-    "by 2030", "by 2035", "by 2040", "by 2050",
-    "next 5 years", "next 10 years",
-    "temperature in 2025", "temperature in 2026", "temperature in 2027",
-    "temperature in 2028", "temperature in 2029", "temperature in 2030",
-    "temperature in 2035", "temperature in 2040", "temperature in 2050",
-    "what will", "how hot will", "how warm will",
-]
-_forecast_kw = [
-    "tomorrow", "next few days", "this week", "weekend",
-    "next 3 days", "next 7 days", "next week",
-]
-# if any(_prediction_kw) AND NOT any(_forecast_kw) → return "prediction"
-# if any(_forecast_kw) → return "weather_forecast"
-
-
-# ════════════════════════════════════════════════════════════════════════
-# STEP 3 — Add these two conditions inside ask_ecolens()
-#           After:  if answer_mode == "hybrid": ...
-#           Before: the final logger.error fallback
-# ════════════════════════════════════════════════════════════════════════
-
-#     if answer_mode == "prediction":
-#         return _answer_prediction(
-#             question=question,
-#             data=data,
-#             history=history,
-#             analysis_state=analysis_state,
-#         )
-#
-#     if answer_mode == "weather_forecast":
-#         return _answer_weather_forecast(
-#             question=question,
-#             history=history,
-#             analysis_state=analysis_state,
-#             default_location=default_location,
-#         )
-
 
 # =========================
 # MAIN ENTRY
